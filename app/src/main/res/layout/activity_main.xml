@@ -14,12 +14,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintVertical_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <View
-        android:id="@+id/view3"
+        android:id="@+id/redCoub"
         android:layout_width="28dp"
         android:layout_height="28dp"
         android:layout_marginStart="13dp"
@@ -83,34 +83,49 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
-        android:layout_width="400dp"
+        android:id="@+id/editText"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
         android:src="@drawable/et_vector_2"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="0dp"
+        app:layout_constraintStart_toEndOf="@id/redCoub"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="50dp"
         />
 
+
     <ImageView
-        android:layout_width="413dp"
-        android:layout_height="431dp"
-        android:src="@drawable/bg_1"
+        android:id="@+id/bg1"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:src="@drawable/m_bg_1"
+        android:adjustViewBounds="true"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view" />
 
-
     <ImageView
-        android:layout_width="411dp"
-        android:layout_height="390dp"
-        android:layout_marginBottom="4dp"
-        android:src="@drawable/bg_2"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:src="@drawable/m_bg_1"
+        android:adjustViewBounds="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="304dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/m_bg_1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -129,5 +144,16 @@
         android:layout_height="wrap_content"
         android:src="@drawable/line_3"
         />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/line_5"
+        app:layout_constraintBottom_toBottomOf="@id/editText"
+        app:layout_constraintStart_toStartOf="@id/editText"
+        android:layout_marginStart="4dp"
+        android:layout_marginBottom="3dp"
+        />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
