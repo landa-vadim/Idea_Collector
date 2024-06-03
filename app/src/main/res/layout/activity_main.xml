@@ -7,42 +7,46 @@
     tools:context=".MainActivity">
 
     <ImageButton
-        android:id="@+id/priorityButton"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:background="#FF0000"
+        android:id="@+id/ibPriority"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginTop="50dp"
         android:layout_marginStart="30dp"
+        android:src="@drawable/ic_idea"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/green" />
 
     <EditText
-        android:id="@id/editText"
-        android:layout_width="230dp"
-        android:layout_height="10dp"
-        android:background="#0022FF"
-        android:layout_marginBottom="0dp"
+        android:id="@id/etIdea"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="30dp"
         android:layout_marginStart="30dp"
-        app:layout_constraintStart_toEndOf="@+id/priorityButton"
-        app:layout_constraintBottom_toBottomOf="@id/priorityButton"/>
+        app:layout_constraintStart_toEndOf="@+id/ibPriority"
+        app:layout_constraintBottom_toBottomOf="@id/ibPriority"
+        android:hint="Запишите идею:"/>
 
     <ImageButton
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:background="#FFC800"
-        android:layout_marginBottom="0dp"
+        android:id="@+id/ibDone"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
         android:layout_marginStart="30dp"
-        app:layout_constraintStart_toEndOf="@+id/editText"
-        app:layout_constraintBottom_toBottomOf="@id/editText" />
+        android:src="@drawable/ic_done"
+        android:background="@android:color/transparent"
+        app:layout_constraintStart_toEndOf="@+id/etIdea"
+        app:layout_constraintBottom_toBottomOf="@+id/etIdea"
+        />
 
-    <View
-        android:layout_width="300dp"
-        android:layout_height="500dp"
-        android:background="#000088"
-        android:layout_marginTop="160dp"
-        android:layout_marginStart="55dp"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvIdeas"
+        android:layout_width="0dp"
+        android:layout_height="600dp"
+        android:layout_marginTop="100dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/etIdea" />
 
 
 
