@@ -1,7 +1,13 @@
 package com.landa.ideacollector
 
 data class Idea(
-    val ideasPriorityColor: Int,
+    val ideasPriority: Priority,
     val ideasText: String,
     val ideasDate: String,
 )
+
+enum class Priority {
+    HIGH,
+    MEDIUM,
+    LOW;
+}

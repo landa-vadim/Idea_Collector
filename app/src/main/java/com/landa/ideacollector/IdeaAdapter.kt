@@ -1,5 +1,6 @@
 package com.landa.ideacollector
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,15 +8,22 @@ import androidx.recyclerview.widget.RecyclerView
 import com.landa.ideacollector.databinding.IdeasItemBinding
 
 class IdeaAdapter : RecyclerView.Adapter<IdeaAdapter.IdeasHolder>() {
-    val ideasList = ArrayList<Idea>()
+    private val ideasList = ArrayList<Idea>()
 
     class IdeasHolder(item: View) : RecyclerView.ViewHolder(item) {
         val binding = IdeasItemBinding.bind(item)
 
         fun bind(idea: Idea) = with(binding) {
-            ibPriority.setBackgroundColor(idea.ideasPriorityColor)
-            tvIdea.setText(idea.ideasText)
-            tvIdeaDate.setText(idea.ideasDate)
+            val backgroundColor = when(idea.ideasPriority) {
+                Priority.HIGH -> R.color.red
+                Priority.MEDIUM -> R.color.yellow
+                Priority.LOW -> R.color.green
+            }
+
+            Log.d("IdeaAdapter", "priority=${idea.ideasPriority}")
+            ibPriority.setBackgroundResource(backgroundColor)
+            tvIdea.text = idea.ideasText
+            tvIdeaDate.text = idea.ideasDate
         }
     }
 
@@ -34,8 +42,6 @@ class IdeaAdapter : RecyclerView.Adapter<IdeaAdapter.IdeasHolder>() {
 
     fun addIdea(idea: Idea) {
         ideasList.add(idea)
-        notifyDataSetChanged()
+        notifyItemInserted(ideasList.lastIndex)
     }
-
-
 }
