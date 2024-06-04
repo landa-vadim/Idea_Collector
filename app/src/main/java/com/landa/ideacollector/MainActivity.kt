@@ -1,6 +1,5 @@
 package com.landa.ideacollector
 
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
@@ -21,10 +20,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     var colorIndex = 0
-    val red = R.color.red
-    val yellow = R.color.yellow
-    val green = R.color.green
-    val colorList = listOf(red, yellow, green)
+    val colorList = listOf(R.color.red, R.color.yellow, R.color.green)
 
     private fun init() {
         Log.d("MainActivity", "init")
@@ -34,8 +30,8 @@ class MainActivity : AppCompatActivity() {
             ibDone.setOnClickListener {
                 val ideasText = etIdea.text.toString()
                 val ideasDate = Date().toString()
-                val priority = Priority.entries[colorIndex]
-
+                val colorIndexChoice = if (colorIndex > 2) 2 else colorIndex
+                val priority = Priority.entries[colorIndexChoice]
                 val idea = Idea(priority, ideasText, ideasDate)
                 adapter.addIdea(idea)
                 etIdea.text.clear()
@@ -47,7 +43,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun changePriorityColor() {
-        if (colorIndex >= 2) colorIndex = 0
-        binding.ibPriority.setBackgroundColor(getColor(colorList[colorIndex]))
+        if (colorIndex > 1) colorIndex = -1
+        binding.ibPriority.setBackgroundColor(getColor(colorList[++colorIndex]))
     }
 }

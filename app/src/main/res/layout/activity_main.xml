@@ -15,7 +15,7 @@
         android:src="@drawable/ic_idea"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/green" />
+        android:background="@color/red" />
 
     <EditText
         android:id="@id/etIdea"
