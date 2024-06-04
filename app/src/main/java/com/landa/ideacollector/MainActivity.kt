@@ -30,8 +30,7 @@ class MainActivity : AppCompatActivity() {
             ibDone.setOnClickListener {
                 val ideasText = etIdea.text.toString()
                 val ideasDate = Date().toString()
-                val colorIndexChoice = if (colorIndex > 2) 2 else colorIndex
-                val priority = Priority.entries[colorIndexChoice]
+                val priority = Priority.entries[colorIndex]
                 val idea = Idea(priority, ideasText, ideasDate)
                 adapter.addIdea(idea)
                 etIdea.text.clear()
