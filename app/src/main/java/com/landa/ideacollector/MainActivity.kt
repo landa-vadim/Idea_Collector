@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.landa.ideacollector.databinding.ActivityMainBinding
 import java.util.Date
+import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -16,13 +17,14 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        init()
+        val db = MainDb.getDb(this)
+        init(db)
     }
 
     var colorIndex = 0
     val colorList = listOf(R.color.red, R.color.yellow, R.color.green)
 
-    private fun init() {
+    private fun init(db: MainDb) {
         Log.d("MainActivity", "init")
         binding.apply {
             rvIdeas.layoutManager = LinearLayoutManager(this@MainActivity)
@@ -34,6 +36,10 @@ class MainActivity : AppCompatActivity() {
                 val idea = Idea(priority, ideasText, ideasDate)
                 adapter.addIdea(idea)
                 etIdea.text.clear()
+                val item = Item(null, priority, ideasText, ideasDate)
+                Thread {
+                    db.getDao().insertItem(item)
+                }.start()
             }
             ibPriority.setOnClickListener {
                 changePriorityColor()
