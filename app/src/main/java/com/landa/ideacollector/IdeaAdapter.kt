@@ -4,26 +4,25 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.landa.ideacollector.databinding.IdeasItemBinding
 
 class IdeaAdapter : RecyclerView.Adapter<IdeaAdapter.IdeasHolder>() {
-    private val ideasList = ArrayList<Idea>()
+    private var ideasList = mutableListOf<Idea>()
 
     class IdeasHolder(item: View) : RecyclerView.ViewHolder(item) {
         val binding = IdeasItemBinding.bind(item)
 
         fun bind(idea: Idea) = with(binding) {
-            val backgroundColor = when(idea.ideasPriority) {
+            val backgroundColor = when (idea.priority) {
                 Priority.HIGH -> R.color.red
                 Priority.MEDIUM -> R.color.yellow
                 Priority.LOW -> R.color.green
             }
-
-            Log.d("IdeaAdapter", "priority=${idea.ideasPriority}")
             ibPriority.setBackgroundResource(backgroundColor)
-            tvIdea.text = idea.ideasText
-            tvIdeaDate.text = idea.ideasDate
+            tvIdea.text = idea.idea
+            tvIdeaDate.text = idea.date
         }
     }
 
@@ -43,5 +42,14 @@ class IdeaAdapter : RecyclerView.Adapter<IdeaAdapter.IdeasHolder>() {
     fun addIdea(idea: Idea) {
         ideasList.add(idea)
         notifyItemInserted(ideasList.lastIndex)
+    }
+
+    fun setData(newIdeasList: List<Idea>) {
+        val diffUtil = MyDiffUtil(ideasList, newIdeasList)
+        val diffResults = DiffUtil.calculateDiff(diffUtil)
+        val newIdeasMutableList = newIdeasList.toMutableList()
+        ideasList = newIdeasMutableList
+        diffResults.dispatchUpdatesTo(this)
+
     }
 }

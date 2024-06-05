@@ -7,7 +7,7 @@ import androidx.room.Query
 @Dao
 interface Dao {
     @Insert
-    fun insertItem(item: Item)
-    @Query("SELECT * FROM items")
-    fun getAllItems(): List<Item>
+    fun insertItem(item: Idea)
+    @Query("SELECT * FROM ideas")
+    fun getAllItems(): List<Idea>
 }

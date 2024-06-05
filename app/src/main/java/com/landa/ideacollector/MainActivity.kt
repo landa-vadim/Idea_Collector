@@ -25,20 +25,27 @@ class MainActivity : AppCompatActivity() {
     val colorList = listOf(R.color.red, R.color.yellow, R.color.green)
 
     private fun init(db: MainDb) {
-        Log.d("MainActivity", "init")
         binding.apply {
             rvIdeas.layoutManager = LinearLayoutManager(this@MainActivity)
             rvIdeas.adapter = adapter
+            Thread {
+                db.getDao().getAllItems().forEach { idea ->
+                    adapter.addIdea(idea)
+                }
+            }.start()
             ibDone.setOnClickListener {
-                val ideasText = etIdea.text.toString()
-                val ideasDate = Date().toString()
-                val priority = Priority.entries[colorIndex]
-                val idea = Idea(priority, ideasText, ideasDate)
-                adapter.addIdea(idea)
+                val idea = Idea(
+                    null,
+                    Priority.entries[colorIndex],
+                    etIdea.text.toString(),
+                    Date().toString()
+                )
                 etIdea.text.clear()
-                val item = Item(null, priority, ideasText, ideasDate)
                 Thread {
-                    db.getDao().insertItem(item)
+                    db.getDao().insertItem(idea)
+                }.start()
+                Thread {
+                    adapter.setData(db.getDao().getAllItems())
                 }.start()
             }
             ibPriority.setOnClickListener {
