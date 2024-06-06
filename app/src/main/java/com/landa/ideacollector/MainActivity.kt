@@ -43,9 +43,8 @@ class MainActivity : AppCompatActivity() {
                 etIdea.text.clear()
                 Thread {
                     db.getDao().insertItem(idea)
-                }.start()
-                Thread {
-                    adapter.setData(db.getDao().getAllItems())
+                    val oldIdeaList = db.getDao().getAllItems()
+                    runOnUiThread { adapter.setData(oldIdeaList) }
                 }.start()
             }
             ibPriority.setOnClickListener {
