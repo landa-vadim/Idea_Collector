@@ -1,13 +1,12 @@
 package com.landa.ideacollector
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.landa.ideacollector.databinding.ActivityMainBinding
 import java.util.Date
-import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -50,7 +49,19 @@ class MainActivity : AppCompatActivity() {
             ibPriority.setOnClickListener {
                 changePriorityColor()
             }
+            ibDone.setOnLongClickListener {
+                val etIdeaText = etIdea.text
+                if (etIdeaText.isEmpty()) {
+                    onLongClickGoSettingsActivity()
+                    return@setOnLongClickListener true
+                } else return@setOnLongClickListener false
+            }
         }
+    }
+
+    fun onLongClickGoSettingsActivity() {
+        val intent = Intent(this, SettingsActivity::class.java)
+        startActivity(intent)
     }
 
     fun changePriorityColor() {
