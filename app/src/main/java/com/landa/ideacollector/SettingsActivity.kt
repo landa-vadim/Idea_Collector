@@ -9,6 +9,10 @@ import com.landa.ideacollector.databinding.ActivitySettingsBinding
 
 class SettingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsBinding
+    var password: String? = null
+    var passwordEnable = false
+    var sortType: Int? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -17,17 +21,35 @@ class SettingsActivity : AppCompatActivity() {
 
         val checkBox = binding.cbPasswordEnable
         checkBox.setOnClickListener {
-            checkBox.text = "GIGGITY!"
+            selectedCheckBox()
         }
 
         binding.bExit.setOnClickListener {
             goMainActivity()
         }
 
+    }
+
+    fun selectedCheckBox() {
+        if (password == null) {
+            setNewPassword()
+            enablePassword()
+        } else enablePassword()
+    }
+
+    fun enablePassword() {
 
     }
 
-    fun selectedCheckBox(checkBox: CheckBox) {
+    fun setNewPassword() {
+
+    }
+
+    fun changeSortType() {
+
+    }
+
+    fun changeTheme() {
 
     }
 
