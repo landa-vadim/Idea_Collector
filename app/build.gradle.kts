@@ -43,7 +43,11 @@ android {
 
 dependencies {
 
+    implementation(libs.androidx.lifecycle)
+    implementation(libs.androidx.fragment)
     implementation(libs.androidx.room)
+    implementation(libs.androidx.preference.ktx)
+    implementation(libs.androidx.preference)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

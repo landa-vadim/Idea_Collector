@@ -1,11 +1,16 @@
-package com.landa.ideacollector
+package activities
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import data.Idea
+import adaptors.IdeaAdapter
+import data.Priority
+import com.landa.ideacollector.R
 import com.landa.ideacollector.databinding.ActivityMainBinding
+import data.dataBase.MainDb
 import java.util.Date
 
 class MainActivity : AppCompatActivity() {
@@ -25,32 +30,31 @@ class MainActivity : AppCompatActivity() {
 
     private fun init(db: MainDb) {
         binding.apply {
-            rvIdeas.layoutManager = LinearLayoutManager(this@MainActivity)
-            rvIdeas.adapter = adapter
+            ideasList.layoutManager = LinearLayoutManager(this@MainActivity)
+            ideasList.adapter = adapter
             Thread {
-                db.getDao().getAllItems().forEach { idea ->
-                    adapter.addIdea(idea)
-                }
+                val oldIdeaList = db.getDao().getAllItems()
+                runOnUiThread { adapter.setData(oldIdeaList) }
             }.start()
-            ibDone.setOnClickListener {
+            doneImageButton.setOnClickListener {
                 val idea = Idea(
                     null,
                     Priority.entries[colorIndex],
-                    etIdea.text.toString(),
+                    ideaEditText.text.toString(),
                     Date().toString()
                 )
-                etIdea.text.clear()
+                ideaEditText.text.clear()
                 Thread {
                     db.getDao().insertItem(idea)
                     val oldIdeaList = db.getDao().getAllItems()
                     runOnUiThread { adapter.setData(oldIdeaList) }
                 }.start()
             }
-            ibPriority.setOnClickListener {
+            priorityImageButton.setOnClickListener {
                 changePriorityColor()
             }
-            ibDone.setOnLongClickListener {
-                val etIdeaText = etIdea.text
+            doneImageButton.setOnLongClickListener {
+                val etIdeaText = ideaEditText.text
                 if (etIdeaText.isEmpty()) {
                     onLongClickGoSettingsActivity()
                     return@setOnLongClickListener true
@@ -66,6 +70,6 @@ class MainActivity : AppCompatActivity() {
 
     fun changePriorityColor() {
         if (colorIndex > 1) colorIndex = -1
-        binding.ibPriority.setBackgroundColor(getColor(colorList[++colorIndex]))
+        binding.priorityImageButton.setBackgroundColor(getColor(colorList[++colorIndex]))
     }
 }

@@ -1,9 +1,10 @@
-package com.landa.ideacollector
+package data.dataBase
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import data.Idea
 
 @Database(entities = [Idea::class], version = 2)
 abstract class MainDb : RoomDatabase() {

@@ -1,12 +1,15 @@
-package com.landa.ideacollector
+package adaptors
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import data.Idea
+import data.Priority
+import com.landa.ideacollector.R
 import com.landa.ideacollector.databinding.IdeasItemBinding
+import utils.MyDiffUtil
 
 class IdeaAdapter : RecyclerView.Adapter<IdeaAdapter.IdeasHolder>() {
     private var ideasList = mutableListOf<Idea>()
@@ -20,7 +23,7 @@ class IdeaAdapter : RecyclerView.Adapter<IdeaAdapter.IdeasHolder>() {
                 Priority.MEDIUM -> R.color.yellow
                 Priority.LOW -> R.color.green
             }
-            ibPriority.setBackgroundResource(backgroundColor)
+            priorityImageButton.setBackgroundResource(backgroundColor)
             tvIdea.text = idea.idea
             tvIdeaDate.text = idea.date
         }
@@ -37,11 +40,6 @@ class IdeaAdapter : RecyclerView.Adapter<IdeaAdapter.IdeasHolder>() {
 
     override fun getItemCount(): Int {
         return ideasList.size
-    }
-
-    fun addIdea(idea: Idea) {
-        ideasList.add(idea)
-        notifyItemInserted(ideasList.lastIndex)
     }
 
     fun setData(newIdeasList: List<Idea>) {

@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context="activities.MainActivity">
 
     <ImageButton
-        android:id="@+id/ibPriority"
+        android:id="@+id/priorityImageButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginTop="50dp"
@@ -18,34 +18,34 @@
         android:background="@color/red" />
 
     <EditText
-        android:id="@id/etIdea"
+        android:id="@id/ideaEditText"
         android:layout_width="200dp"
         android:layout_height="60dp"
         android:layout_marginTop="30dp"
         android:layout_marginStart="30dp"
-        app:layout_constraintStart_toEndOf="@+id/ibPriority"
-        app:layout_constraintBottom_toBottomOf="@id/ibPriority"
+        app:layout_constraintStart_toEndOf="@+id/priorityImageButton"
+        app:layout_constraintBottom_toBottomOf="@id/priorityImageButton"
         android:hint="Запишите идею:"/>
 
     <ImageButton
-        android:id="@+id/ibDone"
+        android:id="@+id/doneImageButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginTop="30dp"
         android:layout_marginStart="30dp"
         android:src="@drawable/ic_done"
         android:background="@android:color/transparent"
-        app:layout_constraintStart_toEndOf="@+id/etIdea"
-        app:layout_constraintBottom_toBottomOf="@+id/etIdea"
+        app:layout_constraintStart_toEndOf="@+id/ideaEditText"
+        app:layout_constraintBottom_toBottomOf="@+id/ideaEditText"
         />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvIdeas"
+        android:id="@+id/ideasList"
         android:layout_width="0dp"
         android:layout_height="600dp"
         android:layout_marginTop="100dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etIdea" />
+        app:layout_constraintTop_toBottomOf="@id/ideaEditText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

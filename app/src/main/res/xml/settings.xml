@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Preference
+        android:key="title"
+        android:title="PASSWORD SETTINGS"
+        app:selectable="false" />
+
+    <CheckBoxPreference
+        android:key="enablePassword"
+        android:title="Enable Password"
+        android:summary="Enables password access to the ideas"
+        />
+
+    <Preference
+        android:key="setPassword"
+        android:title="New password and confirmation"
+        android:summary="Password is doesnt set!"
+        />
+
+    <Preference  android:key="sortType"
+        android:title="Sort type"
+        android:summary="Priority"
+        />
+
+    <Preference  android:key="theme"
+        android:title="Theme"
+        android:summary="Light"
+        />
+
+
+</androidx.preference.PreferenceScreen>
