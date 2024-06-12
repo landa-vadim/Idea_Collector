@@ -10,7 +10,8 @@
     <CheckBoxPreference
         android:key="enablePassword"
         android:title="Enable Password"
-        android:summary="Enables password access to the ideas"
+        android:summaryOff="Enables password access to the ideas"
+        android:summaryOn="Password is SET!"
         />
 
     <Preference

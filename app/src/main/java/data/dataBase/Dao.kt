@@ -8,7 +8,7 @@ import data.Idea
 @Dao
 interface Dao {
     @Insert
-    fun insertItem(item: Idea)
-    @Query("SELECT * FROM ideas")
+    fun insertIdea(item: Idea)
+    @Query("SELECT * FROM items")
     fun getAllItems(): List<Idea>
 }

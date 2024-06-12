@@ -1,14 +1,16 @@
 package utils
 
+import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import data.Password
 
-class DataModel: ViewModel() {
+class DataModel : ViewModel() {
 
-    val setNewPassword: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>()
+    val setPasswordForAccess: MutableLiveData<Int> by lazy {
+        MutableLiveData<Int>()
     }
-    val setPasswordForAccess: MutableLiveData<Boolean> by lazy {
+    val setNewPassword: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
     }
     val sortTypeChange: MutableLiveData<Boolean> by lazy {
@@ -16,6 +18,9 @@ class DataModel: ViewModel() {
     }
     val themeChange: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
+    }
+    val newPassword: MutableLiveData<Password> by lazy {
+        MutableLiveData<Password>()
     }
 
 }

@@ -7,6 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import data.Idea
 import adaptors.IdeaAdapter
+import android.content.SharedPreferences
+import android.view.View
+import androidx.preference.PreferenceManager
 import data.Priority
 import com.landa.ideacollector.R
 import com.landa.ideacollector.databinding.ActivityMainBinding
@@ -16,12 +19,25 @@ import java.util.Date
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val adapter = IdeaAdapter()
+    private lateinit var sharedPreferences: SharedPreferences
+    private val preferenceChangeListener =
+        SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
+            if (key == "enablePassword") {
+                val checkBoxState = sharedPreferences.getBoolean(key, false)
+                lockCheckBox(checkBoxState)
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val db = MainDb.getDb(this)
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        sharedPreferences.registerOnSharedPreferenceChangeListener(preferenceChangeListener)
+        val initialCheckBoxState = sharedPreferences.getBoolean("enablePassword", false)
+        lockCheckBox(initialCheckBoxState)
         init(db)
     }
 
@@ -45,7 +61,7 @@ class MainActivity : AppCompatActivity() {
                 )
                 ideaEditText.text.clear()
                 Thread {
-                    db.getDao().insertItem(idea)
+                    db.getDao().insertIdea(idea)
                     val oldIdeaList = db.getDao().getAllItems()
                     runOnUiThread { adapter.setData(oldIdeaList) }
                 }.start()
@@ -60,6 +76,27 @@ class MainActivity : AppCompatActivity() {
                     return@setOnLongClickListener true
                 } else return@setOnLongClickListener false
             }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(preferenceChangeListener)
+    }
+
+    private fun lockCheckBox(isChecked: Boolean) {
+        val checked = View.VISIBLE
+        val notChecked = View.INVISIBLE
+        if (isChecked) {
+            binding.lockImageView.visibility = checked
+            binding.bg1ImageView.visibility = checked
+            binding.bg2ImageView.visibility = checked
+            binding.bg3ImageView.visibility = checked
+        } else {
+            binding.lockImageView.visibility = notChecked
+            binding.bg1ImageView.visibility = notChecked
+            binding.bg2ImageView.visibility = notChecked
+            binding.bg3ImageView.visibility = notChecked
         }
     }
 
