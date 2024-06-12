@@ -42,8 +42,4 @@ class SettingsActivity : AppCompatActivity() {
         }.start()
     }
 
-    private fun setLockForAccess(lock: Int) {
-        val intent = Intent(this, MainActivity::class.java)
-        intent.putExtra("lock", lock)
-    }
 }
