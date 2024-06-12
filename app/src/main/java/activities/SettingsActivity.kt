@@ -16,7 +16,6 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         openFragment(SettingsFragment())
         val db = MainDb.getDb(this)
-        dataModel.setPasswordForAccess.observe(this, { setLockForAccess(it) })
         dataModel.setNewPassword.observe(this, { if (it) openDialog() })
         dataModel.newPassword.observe(this, { setPassword(db, it) })
 //      dataModel.sortTypeChange.observe(this, { if (it)  })

@@ -7,9 +7,6 @@ import data.Password
 
 class DataModel : ViewModel() {
 
-    val setPasswordForAccess: MutableLiveData<Int> by lazy {
-        MutableLiveData<Int>()
-    }
     val setNewPassword: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
     }

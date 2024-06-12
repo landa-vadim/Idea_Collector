@@ -16,11 +16,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.settings, rootKey)
 
-        val checkBox = preferenceScreen.getPreference(1)
-        if ((checkBox as CheckBoxPreference).isChecked) {
-            Log.e("SettingsFragment", "checkBox.isChecked")
-            dataModel.setPasswordForAccess.value = View.VISIBLE
-        } else dataModel.setPasswordForAccess.value = View.INVISIBLE
         preferenceScreen.getPreference(2).setOnPreferenceClickListener {
             it.setSummary("Password is SET!")
             dataModel.setNewPassword.value = true
