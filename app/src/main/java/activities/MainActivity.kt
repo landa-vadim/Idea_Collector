@@ -15,6 +15,8 @@ import androidx.preference.PreferenceManager
 import data.Priority
 import com.landa.ideacollector.R
 import com.landa.ideacollector.databinding.ActivityMainBinding
+import data.SortType
+import data.SortTypeEnum
 import data.dataBase.MainDb
 import utils.DataModel
 import java.util.Date
@@ -45,6 +47,13 @@ class MainActivity : AppCompatActivity() {
         lockCheckBox(initialCheckBoxState)
         init(db)
         dataModel.sendEnteredPassword.observe(this, { passwordCheck(db, it) })
+        dataModel.sortTypeChange.observe(this, {
+            Thread {
+                val oldIdeaList = db.getDao().getAllItems()
+                runOnUiThread { adapter.setData(oldIdeaList, sortTypeApply(db)) }
+            }.start()
+        })
+//        dataModel.themeChange.observe(this, { themeChange(db) })
     }
 
     var colorIndex = 0
@@ -55,8 +64,12 @@ class MainActivity : AppCompatActivity() {
             ideasList.layoutManager = LinearLayoutManager(this@MainActivity)
             ideasList.adapter = adapter
             Thread {
+                Log.e("VADIM", "init first Thread into")
                 val oldIdeaList = db.getDao().getAllItems()
-                runOnUiThread { adapter.setData(oldIdeaList) }
+                Log.e("VADIM", "init first Thread get oldIdeaList")
+                runOnUiThread {
+                    Log.e("VADIM", "init first Thread runOnUiThread")
+                    adapter.setData(oldIdeaList, sortTypeApply(db)) }
             }.start()
             doneImageButton.setOnClickListener {
                 val idea = Idea(
@@ -69,7 +82,7 @@ class MainActivity : AppCompatActivity() {
                 Thread {
                     db.getDao().insertIdea(idea)
                     val oldIdeaList = db.getDao().getAllItems()
-                    runOnUiThread { adapter.setData(oldIdeaList) }
+                    runOnUiThread { adapter.setData(oldIdeaList, sortTypeApply(db)) }
                 }.start()
             }
             priorityImageButton.setOnClickListener {
@@ -83,7 +96,7 @@ class MainActivity : AppCompatActivity() {
                 } else return@setOnLongClickListener false
             }
             lockImageView.setOnClickListener {
-                openDialog()
+                openPasswordAskDialog()
             }
         }
     }
@@ -112,7 +125,7 @@ class MainActivity : AppCompatActivity() {
         binding.priorityImageButton.setBackgroundColor(getColor(colorList[++colorIndex]))
     }
 
-    fun openDialog() {
+    fun openPasswordAskDialog() {
         PasswordAskDialog().show(supportFragmentManager, "password_ask_dialog")
     }
 
@@ -130,5 +143,39 @@ class MainActivity : AppCompatActivity() {
             }
         }.start()
     }
+
+    fun sortTypeApply(db: MainDb): SortTypeEnum {
+        val getDao = db.getDaoSort()
+        var sortTypeEnum = SortTypeEnum.DATE
+        Thread {
+            Log.e("VADIM", "sortTypeApply Thread")
+            if (getDao.getSortType().isNotEmpty()) {
+                Log.e("VADIM", "sortTypeApply Thread into IF")
+                val sortTypeEnumFromDb = db.getDaoSort().getSortType()[0].sortType
+                if (sortTypeEnumFromDb == SortTypeEnum.DATE) {
+                    sortTypeEnum = SortTypeEnum.PRIORITY
+                } else {
+                    Log.e("VADIM", "sortTypeApply Thread into Else")
+                    sortTypeEnum = SortTypeEnum.DATE
+                }
+            } else {
+                Log.e("VADIM", "sortTypeApply Thread into ELSE")
+                val sortType = SortType(0, sortTypeEnum)
+                getDao.insertSortType(sortType)
+            }
+        }.start()
+        return sortTypeEnum
+    }
+
+//    fun themeChange(db: MainDb) {
+//        Thread {
+//            db.getDaoTheme().getTheme()
+//        }//.start()
+//        if () {
+//            Thread {
+//                db.getDaoTheme()
+//            }//.start()
+//        }
+//    }
 
 }

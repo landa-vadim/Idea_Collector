@@ -12,6 +12,9 @@ class DataModel : ViewModel() {
     val sortTypeChange: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
     }
+    val sortTypeChoice: MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
     val newPassword: MutableLiveData<Password> by lazy {
         MutableLiveData<Password>()
     }
@@ -19,6 +22,12 @@ class DataModel : ViewModel() {
         MutableLiveData<Boolean>()
     }
     val sendEnteredPassword: MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
+    val themeChange: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>()
+    }
+    val themeChoice: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
 

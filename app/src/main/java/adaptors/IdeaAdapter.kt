@@ -1,16 +1,18 @@
 package adaptors
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import data.Idea
 import data.Priority
 import com.landa.ideacollector.R
+import com.landa.ideacollector.databinding.ActivityMainBinding
 import com.landa.ideacollector.databinding.IdeasItemBinding
 import data.SortTypeEnum
+import utils.DataModel
 import utils.MyDiffUtil
 
 class IdeaAdapter : RecyclerView.Adapter<IdeaAdapter.IdeasHolder>() {
@@ -44,24 +46,19 @@ class IdeaAdapter : RecyclerView.Adapter<IdeaAdapter.IdeasHolder>() {
         return ideasList.size
     }
 
-    fun setData(newIdeasList: List<Idea>) {
+    fun setData(newIdeasList: List<Idea>, sortType: SortTypeEnum) {
+        lateinit var sortedIdeasList: List<Idea>
         val oldIdeasList = ideasList.sortedBy { it.id }
         val diffUtil = MyDiffUtil(oldIdeasList, newIdeasList)
         val diffResults = DiffUtil.calculateDiff(diffUtil)
-        val newIdeasMutableList = newIdeasList.toMutableList()
-        ideasList = ideasSorter(newIdeasMutableList)
-        diffResults.dispatchUpdatesTo(this)
-    }
-
-    fun ideasSorter(newIdeasList: MutableList<Idea>): MutableList<Idea> {
-        lateinit var sortedIdeasList: List<Idea>
-        if (SortTypeEnum.PRIORITY == SortTypeEnum.DATE) {
+        if (sortType == SortTypeEnum.DATE) {
             sortedIdeasList = newIdeasList.sortedBy { it.date }
         } else {
             sortedIdeasList = newIdeasList.sortedBy { it.priority.ordinal }
         }
-        val sortedIdeasMutableList = sortedIdeasList.toMutableList()
-        return sortedIdeasMutableList
+        ideasList = sortedIdeasList.toMutableList()
+        diffResults.dispatchUpdatesTo(this)
     }
+
 
 }
