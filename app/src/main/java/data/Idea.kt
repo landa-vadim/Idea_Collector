@@ -19,5 +19,5 @@ data class Idea(
 enum class Priority {
     HIGH,
     MEDIUM,
-    LOW;
+    LOW
 }

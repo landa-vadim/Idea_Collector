@@ -22,6 +22,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
             true
         }
         preferenceScreen.getPreference(3).setOnPreferenceClickListener {
+            dataModel.sortTypeChange.value = true
             it.setSummary("Date")
             true
         }

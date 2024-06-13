@@ -8,17 +8,22 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import data.Idea
 import adaptors.IdeaAdapter
 import android.content.SharedPreferences
+import android.util.Log
 import android.view.View
+import androidx.activity.viewModels
 import androidx.preference.PreferenceManager
 import data.Priority
 import com.landa.ideacollector.R
 import com.landa.ideacollector.databinding.ActivityMainBinding
 import data.dataBase.MainDb
+import utils.DataModel
 import java.util.Date
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val adapter = IdeaAdapter()
+    private val dataModel: DataModel by viewModels()
+
     private lateinit var sharedPreferences: SharedPreferences
     private val preferenceChangeListener =
         SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
@@ -39,6 +44,7 @@ class MainActivity : AppCompatActivity() {
         val initialCheckBoxState = sharedPreferences.getBoolean("enablePassword", false)
         lockCheckBox(initialCheckBoxState)
         init(db)
+        dataModel.sendEnteredPassword.observe(this, { passwordCheck(db, it) })
     }
 
     var colorIndex = 0
@@ -76,6 +82,9 @@ class MainActivity : AppCompatActivity() {
                     return@setOnLongClickListener true
                 } else return@setOnLongClickListener false
             }
+            lockImageView.setOnClickListener {
+                openDialog()
+            }
         }
     }
 
@@ -85,19 +94,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun lockCheckBox(isChecked: Boolean) {
-        val checked = View.VISIBLE
-        val notChecked = View.INVISIBLE
-        if (isChecked) {
-            binding.lockImageView.visibility = checked
-            binding.bg1ImageView.visibility = checked
-            binding.bg2ImageView.visibility = checked
-            binding.bg3ImageView.visibility = checked
-        } else {
-            binding.lockImageView.visibility = notChecked
-            binding.bg1ImageView.visibility = notChecked
-            binding.bg2ImageView.visibility = notChecked
-            binding.bg3ImageView.visibility = notChecked
-        }
+        var visability = View.INVISIBLE
+        if (isChecked) visability = View.VISIBLE
+        binding.lockImageView.visibility = visability
+        binding.bg1ImageView.visibility = visability
+        binding.bg2ImageView.visibility = visability
+        binding.bg3ImageView.visibility = visability
     }
 
     fun onLongClickGoSettingsActivity() {
@@ -109,4 +111,24 @@ class MainActivity : AppCompatActivity() {
         if (colorIndex > 1) colorIndex = -1
         binding.priorityImageButton.setBackgroundColor(getColor(colorList[++colorIndex]))
     }
+
+    fun openDialog() {
+        PasswordAskDialog().show(supportFragmentManager, "password_ask_dialog")
+    }
+
+    fun passwordCheck(db: MainDb, it: String) {
+        Thread {
+            if (db.getDaoPass().getPassword().lastOrNull()?.password == it) {
+                runOnUiThread {
+                    lockCheckBox(false)
+                    dataModel.passwordIsTrue.value = true
+                }
+            } else {
+                runOnUiThread {
+                    dataModel.passwordIsTrue.value = false
+                }
+            }
+        }.start()
+    }
+
 }

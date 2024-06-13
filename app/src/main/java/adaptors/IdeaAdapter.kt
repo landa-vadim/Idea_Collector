@@ -1,5 +1,6 @@
 package adaptors
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import data.Idea
 import data.Priority
 import com.landa.ideacollector.R
 import com.landa.ideacollector.databinding.IdeasItemBinding
+import data.SortTypeEnum
 import utils.MyDiffUtil
 
 class IdeaAdapter : RecyclerView.Adapter<IdeaAdapter.IdeasHolder>() {
@@ -43,11 +45,23 @@ class IdeaAdapter : RecyclerView.Adapter<IdeaAdapter.IdeasHolder>() {
     }
 
     fun setData(newIdeasList: List<Idea>) {
-        val diffUtil = MyDiffUtil(ideasList, newIdeasList)
+        val oldIdeasList = ideasList.sortedBy { it.id }
+        val diffUtil = MyDiffUtil(oldIdeasList, newIdeasList)
         val diffResults = DiffUtil.calculateDiff(diffUtil)
         val newIdeasMutableList = newIdeasList.toMutableList()
-        ideasList = newIdeasMutableList
+        ideasList = ideasSorter(newIdeasMutableList)
         diffResults.dispatchUpdatesTo(this)
-
     }
+
+    fun ideasSorter(newIdeasList: MutableList<Idea>): MutableList<Idea> {
+        lateinit var sortedIdeasList: List<Idea>
+        if (SortTypeEnum.PRIORITY == SortTypeEnum.DATE) {
+            sortedIdeasList = newIdeasList.sortedBy { it.date }
+        } else {
+            sortedIdeasList = newIdeasList.sortedBy { it.priority.ordinal }
+        }
+        val sortedIdeasMutableList = sortedIdeasList.toMutableList()
+        return sortedIdeasMutableList
+    }
+
 }
