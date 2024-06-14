@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import data.Idea
 import adaptors.IdeaAdapter
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
