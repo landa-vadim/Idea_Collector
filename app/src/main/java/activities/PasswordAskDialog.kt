@@ -43,7 +43,7 @@ class PasswordAskDialog : DialogFragment() {
                     if (it) {
                         dismiss()
                     } else {
-                        Toast.makeText(context, "Password is wrong!", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "Password is wrong!", Toast.LENGTH_SHORT).show()
                     }
                 })
         }

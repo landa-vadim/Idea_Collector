@@ -10,11 +10,12 @@ import utils.DataModel
 
 class SettingsActivity : AppCompatActivity() {
     private val dataModel: DataModel by viewModels()
-
+    private lateinit var db: MainDb
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         openFragment(SettingsFragment())
-        val db = MainDb.getDb(this)
+//        val db = MainDb.getDb(this)
+        db = MainDb.DatabaseManager.getDb(this)
         dataModel.setNewPassword.observe(this, { if (it) openDialog() })
         dataModel.newPassword.observe(this, { setPassword(db, it) })
     }

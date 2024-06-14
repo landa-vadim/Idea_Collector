@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "themes")
-data class Theme (
+data class Themes (
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     @ColumnInfo(name = "sortType")

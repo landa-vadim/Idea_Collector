@@ -2,13 +2,14 @@ package data.dataBase
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import data.Theme
+import data.Themes
 
 @Dao
 interface DaoTheme {
-    @Insert
-    fun insertTheme(theme: Theme)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertTheme(theme: Themes)
     @Query("SELECT * FROM themes")
-    fun getTheme(): List<Theme>
+    fun getTheme(): List<Themes>
 }

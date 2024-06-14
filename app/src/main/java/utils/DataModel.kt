@@ -3,6 +3,7 @@ package utils
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import data.Password
+import data.SortTypeEnum
 
 class DataModel : ViewModel() {
 
@@ -20,6 +21,9 @@ class DataModel : ViewModel() {
     }
     val sendEnteredPassword: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
+    }
+    val sortTypeChoice: MutableLiveData<SortTypeEnum> by lazy {
+        MutableLiveData<SortTypeEnum>()
     }
 
 }

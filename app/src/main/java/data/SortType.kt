@@ -6,8 +6,8 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "sortTypes")
 data class SortType (
-    @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    @PrimaryKey(autoGenerate = false)
+    val id: Int = 0,
     @ColumnInfo(name = "sortType")
     val sortType: SortTypeEnum
 )
