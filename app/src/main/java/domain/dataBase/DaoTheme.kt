@@ -1,10 +1,10 @@
-package data.dataBase
+package domain.dataBase
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import data.Themes
+import domain.dataClasses.Themes
 
 @Dao
 interface DaoTheme {

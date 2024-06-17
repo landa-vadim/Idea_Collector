@@ -1,9 +1,9 @@
-package utils
+package domain.utilityClasses
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import data.Password
-import data.SortTypeEnum
+import domain.dataClasses.Password
+import domain.dataClasses.SortTypeEnum
 
 class DataModel : ViewModel() {
 

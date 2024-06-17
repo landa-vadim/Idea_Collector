@@ -1,13 +1,10 @@
-package activities
+package presentation
 
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import androidx.fragment.app.activityViewModels
-import androidx.preference.CheckBoxPreference
 import androidx.preference.PreferenceFragmentCompat
 import com.landa.ideacollector.R
-import utils.DataModel
+import domain.utilityClasses.DataModel
 
 class SettingsFragment : PreferenceFragmentCompat() {
 
@@ -15,7 +12,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.settings, rootKey)
-
         preferenceScreen.getPreference(2).setOnPreferenceClickListener {
             it.setSummary("Password is SET!")
             dataModel.setNewPassword.value = true
@@ -30,12 +26,9 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }
         preferenceScreen.getPreference(4).setOnPreferenceClickListener {
             it.setSummary("Dark")
-
             true
         }
         return
     }
-
-
 }
 

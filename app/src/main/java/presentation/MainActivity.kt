@@ -1,24 +1,23 @@
-package activities
+package presentation
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import data.Idea
-import adaptors.IdeaAdapter
+import domain.dataClasses.Idea
+import data.IdeaAdapter
 import android.content.SharedPreferences
-import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.preference.PreferenceManager
-import data.Priority
+import domain.dataClasses.Priority
 import com.landa.ideacollector.R
 import com.landa.ideacollector.databinding.ActivityMainBinding
-import data.SortType
-import data.SortTypeEnum
-import data.dataBase.MainDb
-import utils.DataModel
+import domain.dataClasses.SortType
+import domain.dataClasses.SortTypeEnum
+import domain.dataBase.MainDb
+import domain.utilityClasses.DataModel
 import java.util.Date
 
 class MainActivity : AppCompatActivity() {
@@ -40,7 +39,6 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-//        val db = MainDb.getDb(this)
         db = MainDb.DatabaseManager.getDb(this)
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         sharedPreferences.registerOnSharedPreferenceChangeListener(preferenceChangeListener)
@@ -69,7 +67,6 @@ class MainActivity : AppCompatActivity() {
             Thread {
                 val oldIdeaList = db.getDao().getAllItems()
                 runOnUiThread { adapter.setData(oldIdeaList, sortTypeApply(db)) }
-//                runOnUiThread { adapter.setData(oldIdeaList) }
             }.start()
             doneImageButton.setOnClickListener {
                 val idea = Idea(
@@ -83,7 +80,6 @@ class MainActivity : AppCompatActivity() {
                     db.getDao().insertIdea(idea)
                     val oldIdeaList = db.getDao().getAllItems()
                     runOnUiThread { adapter.setData(oldIdeaList, sortTypeApply(db)) }
-//                    runOnUiThread { adapter.setData(oldIdeaList) }
                 }.start()
             }
             priorityImageButton.setOnClickListener {

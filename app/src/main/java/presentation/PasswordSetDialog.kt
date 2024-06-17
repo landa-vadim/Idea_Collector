@@ -1,4 +1,4 @@
-package activities
+package presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,8 +10,8 @@ import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.landa.ideacollector.R
-import data.Password
-import utils.DataModel
+import domain.dataClasses.Password
+import domain.utilityClasses.DataModel
 
 class PasswordSetDialog : DialogFragment() {
 

@@ -1,9 +1,9 @@
-package data.dataBase
+package domain.dataBase
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import data.Password
+import domain.dataClasses.Password
 
 @Dao
 interface DaoPass {

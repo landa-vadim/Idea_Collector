@@ -1,14 +1,14 @@
-package data.dataBase
+package domain.dataBase
 
 import android.content.Context
 import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import data.Idea
-import data.Password
-import data.SortType
-import data.Themes
+import domain.dataClasses.Idea
+import domain.dataClasses.Password
+import domain.dataClasses.SortType
+import domain.dataClasses.Themes
 
 @Database(
     entities = [Idea::class, Password::class, SortType::class, Themes::class],

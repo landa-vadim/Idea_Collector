@@ -1,16 +1,16 @@
-package adaptors
+package data
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import data.Idea
-import data.Priority
+import domain.dataClasses.Idea
+import domain.dataClasses.Priority
 import com.landa.ideacollector.R
 import com.landa.ideacollector.databinding.IdeasItemBinding
-import data.SortTypeEnum
-import utils.MyDiffUtil
+import domain.dataClasses.SortTypeEnum
+import domain.utilityClasses.MyDiffUtil
 
 class IdeaAdapter : RecyclerView.Adapter<IdeaAdapter.IdeasHolder>() {
     private var ideasList = mutableListOf<Idea>()
