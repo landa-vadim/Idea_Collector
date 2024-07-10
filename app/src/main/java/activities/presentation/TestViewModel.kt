@@ -1,9 +1,9 @@
 package activities.presentation
 
-import activities.domain.interactor.IdeaInteractor
 import activities.domain.repository.IdeaActualRepository
 import androidx.lifecycle.ViewModel
 import data.Idea
+import data.Priority
 import kotlinx.coroutines.flow.StateFlow
 
 class TestViewModel(val ideaActualRepository: IdeaActualRepository) : ViewModel() {
@@ -16,9 +16,12 @@ class TestViewModel(val ideaActualRepository: IdeaActualRepository) : ViewModel(
     }
 
     fun userClickedButton(string: String) {
-        val idea = Idea()
+        val ideaText = string
+        val date = java.util.Date().toString()
+        val priority = Priority.HIGH
+        val idea = Idea(null, priority, ideaText, date)
         ideaActualRepository.saveToActual(idea)
-//        interactor.handleIdea(string)
+        interactor.handleIdea(string, priority)
     }
 }
 

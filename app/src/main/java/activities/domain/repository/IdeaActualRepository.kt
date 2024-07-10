@@ -5,5 +5,5 @@ import data.Idea
 interface IdeaActualRepository {
     fun saveToActual(idea: Idea)
 
-    fun loadData(): List<Idea>
+    suspend fun loadData(): List<Idea>
 }

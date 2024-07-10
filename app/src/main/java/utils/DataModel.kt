@@ -3,9 +3,13 @@ package utils
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import data.Password
+import data.Priority
 
 class DataModel : ViewModel() {
 
+    val setPriority: MutableLiveData<Priority> by lazy {
+        MutableLiveData<Priority>()
+    }
     val setNewPassword: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
     }
@@ -29,6 +33,9 @@ class DataModel : ViewModel() {
     }
     val themeChoice: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
+    }
+    val changeIdeasPriority: MutableLiveData<Int> by lazy {
+        MutableLiveData<Int>()
     }
 
 }

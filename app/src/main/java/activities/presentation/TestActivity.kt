@@ -1,13 +1,9 @@
 package activities.presentation
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.landa.ideacollector.R
-import com.landa.ideacollector.databinding.ActivityTestBinding
 
 class TestActivity : AppCompatActivity() {
 
@@ -37,7 +33,7 @@ class TestActivity : AppCompatActivity() {
         viewModel.uiStateFlow.collect {
             when(it) {
                 is DataLoaded -> { binding.listView.adapter.setData(it.list) }
-                is Error -> { }
+                is Error -> {  }
             }
         }
     }
