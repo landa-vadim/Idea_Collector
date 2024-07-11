@@ -1,9 +1,8 @@
-package data.dataBase
-
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import data.Idea
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 
 @Dao
 interface Dao {
@@ -11,5 +10,5 @@ interface Dao {
     suspend fun insertIdea(item: Idea)
 
     @Query("SELECT * FROM items")
-    suspend fun getAllItems(): List<Idea>
+    fun getAllItems(): Flow<List<Idea>>
 }

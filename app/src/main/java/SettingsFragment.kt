@@ -1,10 +1,5 @@
-package activities
-
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import androidx.fragment.app.activityViewModels
-import androidx.preference.CheckBoxPreference
 import androidx.preference.PreferenceFragmentCompat
 import com.landa.ideacollector.R
 import utils.DataModel

@@ -1,23 +1,23 @@
-package activities
-
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import adaptors.IdeaAdapter
 import android.content.SharedPreferences
 import android.view.View
 import androidx.activity.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.findViewTreeLifecycleOwner
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.preference.PreferenceManager
 import com.landa.ideacollector.R
 import com.landa.ideacollector.databinding.ActivityMainBinding
-import data.Priority
-import data.SortTypeEnum
-import utils.DataModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val adapter = IdeaAdapter()
-    private val dataModel: DataModel by viewModels()
+    private val dataModel: IdeasViewModel by viewModels()
     private lateinit var sharedPreferences: SharedPreferences
     private val preferenceChangeListener =
         SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
@@ -26,6 +26,8 @@ class MainActivity : AppCompatActivity() {
                 lockCheckBox(checkBoxState)
             }
         }
+    private val recyclerViewScope: CoroutineScope? =
+        binding.ideasList.findViewTreeLifecycleOwner()?.lifecycleScope
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,16 +36,22 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.ideasList.adapter = adapter
         onLongClickGoSettingsActivity()
-        dataModel.passwordIsTrue.observe(this) { lockCheckBox(it) }
-        dataModel.setPriority.observe(this) { changePriorityColor(it) }
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         sharedPreferences.registerOnSharedPreferenceChangeListener(preferenceChangeListener)
         val initialCheckBoxState = sharedPreferences.getBoolean("enablePassword", false)
         lockCheckBox(initialCheckBoxState)
+        recyclerViewScope?.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                dataModel.getSortedIdeas().collect {
+                    adapter.setData(it)
+                }
+            }
+        }
     }
 
     override fun onStart() {
         super.onStart()
+
         with(binding) {
             doneImageButton.setOnClickListener {
                 val ideaText = ideaEditText.text.toString()
@@ -100,30 +108,5 @@ class MainActivity : AppCompatActivity() {
 
     private fun openPasswordAskDialog() {
         PasswordAskDialog().show(supportFragmentManager, "password_ask_dialog")
-    }
-
-
-}
-
-
-private fun init() {
-    binding.apply {
-        ideasList.layoutManager = LinearLayoutManager(this@MainActivity)
-        ideasList.adapter = adapter
-        adapter.setData(oldIdeaList, sortTypeApply(db))
-
-        priorityImageButton.setOnClickListener {
-            changePriorityColor()
-        }
-        doneImageButton.setOnLongClickListener {
-            val etIdeaText = ideaEditText.text
-            if (etIdeaText.isEmpty()) {
-                onLongClickGoSettingsActivity()
-                return@setOnLongClickListener true
-            } else return@setOnLongClickListener false
-        }
-        lockImageView.setOnClickListener {
-            openPasswordAskDialog()
-        }
     }
 }

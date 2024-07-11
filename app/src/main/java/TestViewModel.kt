@@ -1,9 +1,5 @@
-package activities.presentation
-
 import activities.domain.repository.IdeaActualRepository
 import androidx.lifecycle.ViewModel
-import data.Idea
-import data.Priority
 import kotlinx.coroutines.flow.StateFlow
 
 class TestViewModel(val ideaActualRepository: IdeaActualRepository) : ViewModel() {

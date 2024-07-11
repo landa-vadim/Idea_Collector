@@ -1,11 +1,7 @@
-package activities
-
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceFragmentCompat
-import data.Password
-import data.dataBase.MainDb
 import utils.DataModel
 
 class SettingsActivity : AppCompatActivity() {

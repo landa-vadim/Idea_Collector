@@ -1,7 +1,4 @@
-package utils
-
 import androidx.recyclerview.widget.DiffUtil
-import data.Idea
 
 class MyDiffUtil(
     private val oldList: List<Idea>,
