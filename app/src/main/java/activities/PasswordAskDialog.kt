@@ -38,14 +38,14 @@ class PasswordAskDialog : DialogFragment() {
         okBtn.setOnClickListener {
             val enteredPass = passwordEt.text.toString()
             dataModel.sendEnteredPassword.value = enteredPass
-            dataModel.passwordIsTrue.observe(this,
-                {
-                    if (it) {
-                        dismiss()
-                    } else {
-                        Toast.makeText(context, "Password is wrong!", Toast.LENGTH_LONG).show()
-                    }
-                })
+            dataModel.passwordIsTrue.observe(this
+            ) {
+                if (it) {
+                    dismiss()
+                } else {
+                    Toast.makeText(context, "Password is wrong!", Toast.LENGTH_LONG).show()
+                }
+            }
         }
     }
 }

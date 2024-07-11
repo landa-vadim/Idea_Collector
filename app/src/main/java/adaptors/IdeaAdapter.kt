@@ -43,24 +43,11 @@ class IdeaAdapter : RecyclerView.Adapter<IdeaAdapter.IdeasHolder>() {
         return ideasList.size
     }
 
-    fun setData(newIdeasList: List<Idea>, sortType: SortTypeEnum) {
+    fun setData(newIdeasList: List<Idea>) {
         val oldIdeasList = ideasList.sortedBy { it.id }
         val diffUtil = MyDiffUtil(oldIdeasList, newIdeasList)
         val diffResults = DiffUtil.calculateDiff(diffUtil)
-        val sortedIdeasList = sortingIdeas(oldIdeasList, SortTypeEnum.DATE)
-        ideasList = sortedIdeasList.toMutableList()
         diffResults.dispatchUpdatesTo(this)
     }
-
-    fun sortingIdeas(ideaList: List<Idea>, sortType: SortTypeEnum): List<Idea> {
-        var sortedIdeasList: List<Idea>
-        if (sortType == SortTypeEnum.DATE) {
-            sortedIdeasList = ideaList.sortedBy { it.date }
-        } else {
-            sortedIdeasList = ideaList.sortedBy { it.priority.ordinal }
-        }
-        return sortedIdeasList
-    }
-
 
 }

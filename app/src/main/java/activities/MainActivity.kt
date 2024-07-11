@@ -4,17 +4,29 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import adaptors.IdeaAdapter
+import android.content.SharedPreferences
 import android.view.View
 import androidx.activity.viewModels
+import androidx.preference.PreferenceManager
 import com.landa.ideacollector.R
 import com.landa.ideacollector.databinding.ActivityMainBinding
 import data.Priority
+import data.SortTypeEnum
 import utils.DataModel
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val adapter = IdeaAdapter()
     private val dataModel: DataModel by viewModels()
+    private lateinit var sharedPreferences: SharedPreferences
+    private val preferenceChangeListener =
+        SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
+            if (key == "enablePassword") {
+                val checkBoxState = sharedPreferences.getBoolean(key, false)
+                lockCheckBox(checkBoxState)
+            }
+        }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,10 +36,21 @@ class MainActivity : AppCompatActivity() {
         onLongClickGoSettingsActivity()
         dataModel.passwordIsTrue.observe(this) { lockCheckBox(it) }
         dataModel.setPriority.observe(this) { changePriorityColor(it) }
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        sharedPreferences.registerOnSharedPreferenceChangeListener(preferenceChangeListener)
+        val initialCheckBoxState = sharedPreferences.getBoolean("enablePassword", false)
+        lockCheckBox(initialCheckBoxState)
     }
 
     override fun onStart() {
         super.onStart()
+        with(binding) {
+            doneImageButton.setOnClickListener {
+                val ideaText = ideaEditText.text.toString()
+
+                ideaEditText.text.clear()
+            }
+        }
     }
 
     override fun onResume() {
@@ -40,6 +63,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(preferenceChangeListener)
     }
 
     override fun onDestroy() {
@@ -68,7 +92,7 @@ class MainActivity : AppCompatActivity() {
                 when (priority) {
                     Priority.HIGH -> R.color.red
                     Priority.MEDIUM -> R.color.yellow
-                    Priority.LOW -> R.color.red
+                    Priority.LOW -> R.color.green
                 }
             binding.priorityImageButton.setBackgroundColor(priorityColor)
         }
@@ -82,123 +106,24 @@ class MainActivity : AppCompatActivity() {
 }
 
 
-//    private lateinit var sharedPreferences: SharedPreferences
-//    private val preferenceChangeListener =
-//        SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
-//            if (key == "enablePassword") {
-//                val checkBoxState = sharedPreferences.getBoolean(key, false)
-//                lockCheckBox(checkBoxState)
-//            }
-//        }
+private fun init() {
+    binding.apply {
+        ideasList.layoutManager = LinearLayoutManager(this@MainActivity)
+        ideasList.adapter = adapter
+        adapter.setData(oldIdeaList, sortTypeApply(db))
 
-//        val db = MainDb.getDb(this)
-//        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-//        sharedPreferences.registerOnSharedPreferenceChangeListener(preferenceChangeListener)
-//        val initialCheckBoxState = sharedPreferences.getBoolean("enablePassword", false)
-//        lockCheckBox(initialCheckBoxState)
-//        init(db)
-//        dataModel.sendEnteredPassword.observe(this, { passwordCheck(db, it) })
-//        dataModel.sortTypeChange.observe(this, {
-//            Thread {
-//                val oldIdeaList = db.getDao().getAllItems()
-//                runOnUiThread { adapter.setData(oldIdeaList, sortTypeApply(db)) }
-//            }.start()
-//        })
-//        dataModel.themeChange.observe(this, { themeChange(db) })
-
-//    private fun init(db: MainDb) {
-//        binding.apply {
-//            ideasList.layoutManager = LinearLayoutManager(this@MainActivity)
-//            ideasList.adapter = adapter
-//            Thread {
-//                Log.e("VADIM", "init first Thread into")
-//                val oldIdeaList = db.getDao().getAllItems()
-//                Log.e("VADIM", "init first Thread get oldIdeaList")
-//                runOnUiThread {
-//                    Log.e("VADIM", "init first Thread runOnUiThread")
-//                    adapter.setData(oldIdeaList, sortTypeApply(db)) }
-//            }.start()
-//            doneImageButton.setOnClickListener {
-//                val idea = Idea(
-//                    null,
-//                    Priority.entries[colorIndex],
-//                    ideaEditText.text.toString(),
-//                    Date().toString()
-//                )
-//                ideaEditText.text.clear()
-//                Thread {
-//                    db.getDao().insertIdea(idea)
-//                    val oldIdeaList = db.getDao().getAllItems()
-//                    runOnUiThread { adapter.setData(oldIdeaList, sortTypeApply(db)) }
-//                }.start()
-//            }
-//            priorityImageButton.setOnClickListener {
-//                changePriorityColor()
-//            }
-//            doneImageButton.setOnLongClickListener {
-//                val etIdeaText = ideaEditText.text
-//                if (etIdeaText.isEmpty()) {
-//                    onLongClickGoSettingsActivity()
-//                    return@setOnLongClickListener true
-//                } else return@setOnLongClickListener false
-//            }
-//            lockImageView.setOnClickListener {
-//                openPasswordAskDialog()
-//            }
-//        }
-//    }
-
-
-//    override fun onDestroy() {        // переместить в функцию onStop() (скорее всего)
-//        super.onDestroy()
-//        sharedPreferences.unregisterOnSharedPreferenceChangeListener(preferenceChangeListener)
-//    }
-
-//    fun passwordCheck(db: MainDb, it: String) {
-//        Thread {
-//            if (db.getDaoPass().getPassword().lastOrNull()?.password == it) {
-//                runOnUiThread {
-//                    lockCheckBox(false)
-//                    dataModel.passwordIsTrue.value = true
-//                }
-//            } else {
-//                runOnUiThread {
-//                    dataModel.passwordIsTrue.value = false
-//                }
-//            }
-//        }.start()
-//    }
-
-//    fun sortTypeApply(db: MainDb): SortTypeEnum {
-//        val getDao = db.getDaoSort()
-//        var sortTypeEnum = SortTypeEnum.DATE
-//        Thread {
-//            Log.e("VADIM", "sortTypeApply Thread")
-//            if (getDao.getSortType().isNotEmpty()) {
-//                Log.e("VADIM", "sortTypeApply Thread into IF")
-//                val sortTypeEnumFromDb = db.getDaoSort().getSortType()[0].sortType
-//                if (sortTypeEnumFromDb == SortTypeEnum.DATE) {
-//                    sortTypeEnum = SortTypeEnum.PRIORITY
-//                } else {
-//                    Log.e("VADIM", "sortTypeApply Thread into Else")
-//                    sortTypeEnum = SortTypeEnum.DATE
-//                }
-//            } else {
-//                Log.e("VADIM", "sortTypeApply Thread into ELSE")
-//                val sortType = SortType(0, sortTypeEnum)
-//                getDao.insertSortType(sortType)
-//            }
-//        }.start()
-//        return sortTypeEnum
-//    }
-
-//    fun themeChange(db: MainDb) {
-//        Thread {
-//            db.getDaoTheme().getTheme()
-//        }//.start()
-//        if () {
-//            Thread {
-//                db.getDaoTheme()
-//            }//.start()
-//        }
-//    }
+        priorityImageButton.setOnClickListener {
+            changePriorityColor()
+        }
+        doneImageButton.setOnLongClickListener {
+            val etIdeaText = ideaEditText.text
+            if (etIdeaText.isEmpty()) {
+                onLongClickGoSettingsActivity()
+                return@setOnLongClickListener true
+            } else return@setOnLongClickListener false
+        }
+        lockImageView.setOnClickListener {
+            openPasswordAskDialog()
+        }
+    }
+}

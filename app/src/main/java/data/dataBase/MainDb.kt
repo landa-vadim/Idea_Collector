@@ -17,16 +17,8 @@ abstract class MainDb : RoomDatabase() {
     abstract fun getDaoPass(): DaoPass
 
     companion object {
-        @Volatile
-        private var INSTANCE: MainDb? = null
 
         fun getDb(context: Context): MainDb {
-            return INSTANCE ?: synchronized(this) {
-                INSTANCE ?: buildDb(context).also { INSTANCE = it }
-            }
-        }
-
-        fun buildDb(context: Context): MainDb {
             return Room.databaseBuilder(
                 context.applicationContext,
                 MainDb::class.java,
