@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface Dao {
     @Insert
-    fun insertIdea(item: Idea)
+    suspend fun insertIdea(item: Idea)
     @Query("SELECT * FROM items")
     fun getAllItems(): Flow<List<Idea>>
 }

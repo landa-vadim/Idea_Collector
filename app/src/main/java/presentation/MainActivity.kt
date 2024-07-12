@@ -8,17 +8,23 @@ import data.IdeaAdapter
 import android.content.SharedPreferences
 import android.view.View
 import androidx.activity.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.preference.PreferenceManager
 import com.landa.ideacollector.R
 import com.landa.ideacollector.databinding.ActivityMainBinding
-import domain.dataBase.MainDb
+import domain.IdeasApplication
 import domain.utilityClasses.IdeasViewModel
+import domain.utilityClasses.IdeasViewModelFactory
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val adapter = IdeaAdapter()
-    private val dataModel: IdeasViewModel by viewModels()
-    private lateinit var db: MainDb
+    private val viewModel: IdeasViewModel by viewModels {
+        IdeasViewModelFactory((application as IdeasApplication).repository)
+    }
     private lateinit var sharedPreferences: SharedPreferences
     private val preferenceChangeListener =
         SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
@@ -34,20 +40,25 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.getSortedIdeas().collect {
+                    adapter.setData(it)
+                }
+            }
+        }
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         sharedPreferences.registerOnSharedPreferenceChangeListener(preferenceChangeListener)
         val initialCheckBoxState = sharedPreferences.getBoolean("enablePassword", false)
         lockCheckBox(initialCheckBoxState)
 
-    }
-
-    private fun init(db: MainDb) {
         binding.apply {
             ideasList.layoutManager = LinearLayoutManager(this@MainActivity)
             ideasList.adapter = adapter
             doneImageButton.setOnClickListener {
-                ideaEditText.text.toString()
+                val ideaText = ideaEditText.text.toString()
                 ideaEditText.text.clear()
+                viewModel.userClickedDoneButton(ideaText, colorIndex)
             }
             priorityImageButton.setOnClickListener {
                 changePriorityColor()
