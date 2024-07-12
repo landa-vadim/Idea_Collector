@@ -2,28 +2,22 @@ package presentation
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import domain.dataClasses.Idea
 import data.IdeaAdapter
 import android.content.SharedPreferences
 import android.view.View
 import androidx.activity.viewModels
 import androidx.preference.PreferenceManager
-import domain.dataClasses.Priority
 import com.landa.ideacollector.R
 import com.landa.ideacollector.databinding.ActivityMainBinding
-import domain.dataClasses.SortType
-import domain.dataClasses.SortTypeEnum
 import domain.dataBase.MainDb
-import domain.utilityClasses.DataModel
-import java.util.Date
+import domain.utilityClasses.IdeasViewModel
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val adapter = IdeaAdapter()
-    private val dataModel: DataModel by viewModels()
+    private val dataModel: IdeasViewModel by viewModels()
     private lateinit var db: MainDb
     private lateinit var sharedPreferences: SharedPreferences
     private val preferenceChangeListener =
@@ -33,54 +27,27 @@ class MainActivity : AppCompatActivity() {
                 lockCheckBox(checkBoxState)
             }
         }
+    private var colorIndex = 0
+    private val colorList = listOf(R.color.red, R.color.yellow, R.color.green)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        db = MainDb.DatabaseManager.getDb(this)
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         sharedPreferences.registerOnSharedPreferenceChangeListener(preferenceChangeListener)
         val initialCheckBoxState = sharedPreferences.getBoolean("enablePassword", false)
         lockCheckBox(initialCheckBoxState)
-        init(db)
-        dataModel.sendEnteredPassword.observe(this, { passwordCheck(db, it) })
-        dataModel.sortTypeChange.observe(this, {
-            if (it) {
-                Thread {
-                    val oldIdeaList = db.getDao().getAllItems()
-                    runOnUiThread { adapter.setData(oldIdeaList, sortTypeApply(db)) }
-                }.start()
-            }
-        })
 
     }
-
-    var colorIndex = 0
-    val colorList = listOf(R.color.red, R.color.yellow, R.color.green)
 
     private fun init(db: MainDb) {
         binding.apply {
             ideasList.layoutManager = LinearLayoutManager(this@MainActivity)
             ideasList.adapter = adapter
-            Thread {
-                val oldIdeaList = db.getDao().getAllItems()
-                runOnUiThread { adapter.setData(oldIdeaList, sortTypeApply(db)) }
-            }.start()
             doneImageButton.setOnClickListener {
-                val idea = Idea(
-                    null,
-                    Priority.entries[colorIndex],
-                    ideaEditText.text.toString(),
-                    Date().toString()
-                )
+                ideaEditText.text.toString()
                 ideaEditText.text.clear()
-                Thread {
-                    db.getDao().insertIdea(idea)
-                    val oldIdeaList = db.getDao().getAllItems()
-                    runOnUiThread { adapter.setData(oldIdeaList, sortTypeApply(db)) }
-                }.start()
             }
             priorityImageButton.setOnClickListener {
                 changePriorityColor()
@@ -126,42 +93,5 @@ class MainActivity : AppCompatActivity() {
         PasswordAskDialog().show(supportFragmentManager, "password_ask_dialog")
     }
 
-    fun passwordCheck(db: MainDb, enteredPassword: String) {
-        Thread {
-            if (db.getDaoPass().getPassword().lastOrNull()?.password == enteredPassword) {
-                runOnUiThread {
-                    lockCheckBox(false)
-                    dataModel.passwordIsTrue.value = true
-                }
-            } else {
-                runOnUiThread {
-                    dataModel.passwordIsTrue.value = false
-                }
-            }
-        }.start()
-    }
-
-    fun sortTypeApply(db: MainDb): SortTypeEnum {
-        val getDao = db.getDaoSort()
-        var sortTypeEnum = SortTypeEnum.DATE
-        Thread {
-            if (getDao.getSortType().isNotEmpty()) {
-                val sortTypeEnumFromDb = db.getDaoSort().getSortType()[0].sortType
-                if (sortTypeEnumFromDb == SortTypeEnum.DATE) {
-                    sortTypeEnum = SortTypeEnum.PRIORITY
-                    val newSortType = SortType(0, sortTypeEnum)
-                    getDao.insertSortType(newSortType)
-                } else {
-                    sortTypeEnum = SortTypeEnum.DATE
-                    val newSortType = SortType(0, sortTypeEnum)
-                    getDao.insertSortType(newSortType)
-                }
-            } else {
-                val sortType = SortType(0, sortTypeEnum)
-                getDao.insertSortType(sortType)
-            }
-        }.start()
-        return sortTypeEnum
-    }
 
 }

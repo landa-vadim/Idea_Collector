@@ -3,20 +3,18 @@ package presentation
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModel
 import androidx.preference.PreferenceFragmentCompat
 import domain.dataClasses.Password
 import domain.dataBase.MainDb
-import domain.utilityClasses.DataModel
 
 class SettingsActivity : AppCompatActivity() {
-    private val dataModel: DataModel by viewModels()
+    private val dataModel: ViewModel by viewModels()
     private lateinit var db: MainDb
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         openFragment(SettingsFragment())
         db = MainDb.DatabaseManager.getDb(this)
-        dataModel.setNewPassword.observe(this, { if (it) openDialog() })
-        dataModel.newPassword.observe(this, { setPassword(db, it) })
     }
     private fun openFragment(fragment: PreferenceFragmentCompat) {
         supportFragmentManager

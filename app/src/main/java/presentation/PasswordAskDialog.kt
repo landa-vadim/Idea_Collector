@@ -9,12 +9,12 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModel
 import com.landa.ideacollector.R
-import domain.utilityClasses.DataModel
 
 class PasswordAskDialog : DialogFragment() {
 
-    private val dataModel: DataModel by activityViewModels()
+    private val dataModel: ViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,15 +35,6 @@ class PasswordAskDialog : DialogFragment() {
         }
         okBtn.setOnClickListener {
             val enteredPass = passwordEt.text.toString()
-            dataModel.sendEnteredPassword.value = enteredPass
-            dataModel.passwordIsTrue.observe(this,
-                {
-                    if (it) {
-                        dismiss()
-                    } else {
-                        Toast.makeText(context, "Password is wrong!", Toast.LENGTH_SHORT).show()
-                    }
-                })
         }
     }
 }

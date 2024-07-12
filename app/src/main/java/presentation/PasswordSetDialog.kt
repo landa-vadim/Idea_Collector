@@ -9,13 +9,13 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModel
 import com.landa.ideacollector.R
 import domain.dataClasses.Password
-import domain.utilityClasses.DataModel
 
 class PasswordSetDialog : DialogFragment() {
 
-    private val dataModel: DataModel by activityViewModels()
+    private val dataModel: ViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,7 +41,6 @@ class PasswordSetDialog : DialogFragment() {
             val enteredConfirm = confirmEt.text.toString()
             if (enteredPass.isNotEmpty() && enteredPass == enteredConfirm) {
                 val pass = Password(null, enteredPass)
-                dataModel.newPassword.value = pass
                 dismiss()
             }
             if (enteredPass.isEmpty() || enteredConfirm.isEmpty()) {
