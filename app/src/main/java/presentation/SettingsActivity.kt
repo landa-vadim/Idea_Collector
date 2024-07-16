@@ -5,7 +5,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.preference.PreferenceFragmentCompat
-import domain.dataClasses.Password
+import data.dataClasses.Password
 import domain.dataBase.MainDb
 
 class SettingsActivity : AppCompatActivity() {

@@ -1,4 +1,4 @@
-package domain.dataClasses
+package data.dataClasses
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

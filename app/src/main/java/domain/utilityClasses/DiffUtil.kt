@@ -1,7 +1,7 @@
 package domain.utilityClasses
 
 import androidx.recyclerview.widget.DiffUtil
-import domain.dataClasses.Idea
+import data.dataClasses.Idea
 
 class MyDiffUtil(
     private val oldList: List<Idea>,

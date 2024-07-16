@@ -1,7 +1,7 @@
 package domain
 
 import domain.dataBase.Dao
-import domain.dataClasses.Idea
+import data.dataClasses.Idea
 import kotlinx.coroutines.flow.Flow
 
 class IdeasRepository(private val dao: Dao) {

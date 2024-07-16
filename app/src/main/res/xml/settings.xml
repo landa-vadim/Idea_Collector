@@ -22,7 +22,7 @@
 
     <Preference  android:key="sortType"
         android:title="Sort type"
-        android:summary="Priority"
+        android:summary="Date"
         />
 
     <Preference  android:key="theme"

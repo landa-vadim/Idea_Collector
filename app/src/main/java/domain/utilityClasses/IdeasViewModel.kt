@@ -1,16 +1,20 @@
 package domain.utilityClasses
 
+import android.content.SharedPreferences
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.preference.PreferenceManager
 import domain.IdeasRepository
-import domain.dataClasses.Idea
-import domain.dataClasses.Priority
+import data.dataClasses.Idea
+import data.dataClasses.Priority
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import presentation.MainActivity
+import presentation.SettingsActivity
 import java.util.Date
 
 class IdeasViewModel(private val repository: IdeasRepository) : ViewModel() {
@@ -48,15 +52,5 @@ class IdeasViewModel(private val repository: IdeasRepository) : ViewModel() {
             ideaDate
         )
         viewModelScope.launch { repository.insertIdea(idea) }
-    }
-}
-
-class IdeasViewModelFactory(private val repository: IdeasRepository) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(IdeasViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return IdeasViewModel(repository) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

@@ -11,7 +11,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModel
 import com.landa.ideacollector.R
-import domain.dataClasses.Password
+import data.dataClasses.Password
 
 class PasswordSetDialog : DialogFragment() {
 

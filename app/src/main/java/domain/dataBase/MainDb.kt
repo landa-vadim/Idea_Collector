@@ -6,10 +6,10 @@ import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import domain.dataClasses.Idea
-import domain.dataClasses.Password
-import domain.dataClasses.SortType
-import domain.dataClasses.Themes
+import data.dataClasses.Idea
+import data.dataClasses.Password
+import data.dataClasses.SortType
+import data.dataClasses.Themes
 import kotlinx.coroutines.CoroutineScope
 
 @Database(

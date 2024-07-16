@@ -5,8 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import domain.dataClasses.Idea
-import domain.dataClasses.Priority
+import data.dataClasses.Idea
+import data.dataClasses.Priority
 import com.landa.ideacollector.R
 import com.landa.ideacollector.databinding.IdeasItemBinding
 import domain.utilityClasses.MyDiffUtil
