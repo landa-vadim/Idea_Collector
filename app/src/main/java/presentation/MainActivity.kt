@@ -42,6 +42,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+        lockCheckBox(viewModel.passCheckBoxState())
 //        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
 //        sharedPreferences.registerOnSharedPreferenceChangeListener(preferenceChangeListener)
 //        val initialCheckBoxState = sharedPreferences.getBoolean("enablePassword", false)

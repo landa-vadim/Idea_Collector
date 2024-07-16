@@ -9,7 +9,6 @@ import data.dataClasses.Password
 import domain.dataBase.MainDb
 
 class SettingsActivity : AppCompatActivity() {
-    private val dataModel: ViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         openFragment(SettingsFragment())

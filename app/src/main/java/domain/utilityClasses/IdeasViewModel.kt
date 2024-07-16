@@ -53,4 +53,8 @@ class IdeasViewModel(private val repository: IdeasRepository) : ViewModel() {
         )
         viewModelScope.launch { repository.insertIdea(idea) }
     }
+    fun userSwitchedPassCheckBox(switch: Boolean) {
+        repository.passCheckBoxSwitch(switch)
+    }
+    fun passCheckBoxState(): Boolean = repository.passCheckBoxState
 }
