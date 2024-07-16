@@ -20,14 +20,15 @@ class MainActivity : AppCompatActivity() {
     private val adapter = IdeaAdapter()
     private val viewModel by viewModel<IdeasViewModel>()
 
-//    private lateinit var sharedPreferences: SharedPreferences
-//    private val preferenceChangeListener =
-//        SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
-//            if (key == "enablePassword") {
-//                val checkBoxState = sharedPreferences.getBoolean(key, false)
-//                lockCheckBox(checkBoxState)
-//            }
-//        }
+    private lateinit var sharedPreferences: SharedPreferences
+    private val preferenceChangeListener =
+        SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
+            if (key == "enablePassword") {
+                val checkBoxState = sharedPreferences.getBoolean(key, false)
+                lockCheckBox(checkBoxState)
+            }
+        }
+
     private var colorIndex = 0
     private val colorList = listOf(R.color.red, R.color.yellow, R.color.green)
 
@@ -43,10 +44,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
         lockCheckBox(viewModel.passCheckBoxState())
-//        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-//        sharedPreferences.registerOnSharedPreferenceChangeListener(preferenceChangeListener)
-//        val initialCheckBoxState = sharedPreferences.getBoolean("enablePassword", false)
-//        lockCheckBox(initialCheckBoxState)
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        sharedPreferences.registerOnSharedPreferenceChangeListener(preferenceChangeListener)
+        val initialCheckBoxState = sharedPreferences.getBoolean("enablePassword", false)
+        lockCheckBox(initialCheckBoxState)
 
         binding.apply {
             ideasList.layoutManager = LinearLayoutManager(this@MainActivity)

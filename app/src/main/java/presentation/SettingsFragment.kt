@@ -14,11 +14,9 @@ class SettingsFragment : PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.settings, rootKey)
         preferenceScreen.getPreference(2).setOnPreferenceChangeListener { checkBox, _ ->
             if (checkBox.isEnabled) {
-                viewModel.userSwitchedPassCheckBox(false)
-                checkBox.setSummary("Password is switch OFF")
-            } else {
                 viewModel.userSwitchedPassCheckBox(true)
-                checkBox.setSummary("Password is switch ON")
+            } else {
+                viewModel.userSwitchedPassCheckBox(false)
             }
             true
         }

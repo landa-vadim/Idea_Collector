@@ -12,7 +12,7 @@ class IdeasRepository(private val dao: Dao, val shrdPref: ShrdPref) {
         dao.insertIdea(idea)
     }
 
-    val passCheckBoxState = shrdPref.passCheckBoxGetValue()
+    val passCheckBoxState: Boolean = shrdPref.passCheckBoxGetValue()
 
     fun passCheckBoxSwitch(switch: Boolean) {
         shrdPref.passCheckBoxSetValue(switch)
