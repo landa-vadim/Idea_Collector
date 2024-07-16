@@ -24,7 +24,7 @@ abstract class MainDb : RoomDatabase() {
     companion object DatabaseManager {
         private var instance: MainDb? = null
 
-        fun getDb(context: Context, scope: CoroutineScope): MainDb {
+        fun getDb(context: Context): MainDb {
             return instance ?: synchronized(this) {
                 instance ?: buildDatabase(context).also { instance = it }
             }
