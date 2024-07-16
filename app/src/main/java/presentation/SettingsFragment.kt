@@ -1,6 +1,7 @@
 package presentation
 
 import android.os.Bundle
+import androidx.preference.CheckBoxPreference
 import androidx.preference.PreferenceFragmentCompat
 import com.landa.ideacollector.R
 import domain.utilityClasses.IdeasViewModel
@@ -12,6 +13,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.settings, rootKey)
+        CheckBoxPreference()
         preferenceScreen.getPreference(2).setOnPreferenceChangeListener { checkBox, _ ->
             if (checkBox.isEnabled) {
                 viewModel.userSwitchedPassCheckBox(true)

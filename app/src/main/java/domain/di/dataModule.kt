@@ -1,5 +1,7 @@
 package domain.di
 
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import domain.IdeasRepository
 import domain.dataBase.Dao
 import domain.dataBase.MainDb
@@ -16,7 +18,11 @@ val dataModule = module {
     single<Dao> {
         MainDb.getDb(context = get()).getDao()
     }
+    single<DataStore<Preferences>> {
+        val dataStore: DataStore<Preferences>
+        dataStore
+    }
     single<IdeasRepository> {
-        IdeasRepository(dao = get(), shrdPref = get())
+        IdeasRepository(dao = get(), shrdPref = get(), dataStore = get())
     }
 }
