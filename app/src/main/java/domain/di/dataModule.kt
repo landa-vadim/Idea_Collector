@@ -18,11 +18,11 @@ val dataModule = module {
     single<Dao> {
         MainDb.getDb(context = get()).getDao()
     }
-    single<DataStore<Preferences>> {
-        val dataStore: DataStore<Preferences>
-        dataStore
-    }
+//    single<DataStore<Preferences>> {
+//        val dataStore: DataStore<Preferences>
+//        dataStore
+//    }
     single<IdeasRepository> {
-        IdeasRepository(dao = get(), shrdPref = get(), dataStore = get())
+        IdeasRepository(dao = get(), shrdPref = get())
     }
 }
