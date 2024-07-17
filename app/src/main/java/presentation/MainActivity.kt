@@ -34,6 +34,21 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.getSortedType().collect {
+
+                }
+            }
+        }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.getTheme().collect {
+
+                }
+            }
+        }
+        lockCheckBox(viewModel.passCheckBoxState())
         binding.apply {
             ideasList.layoutManager = LinearLayoutManager(this@MainActivity)
             ideasList.adapter = adapter
@@ -56,11 +71,6 @@ class MainActivity : AppCompatActivity() {
                 openDialog()
             }
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        lockCheckBox(viewModel.passCheckBoxState())
     }
 
     private fun lockCheckBox(isChecked: Boolean) {

@@ -27,11 +27,11 @@ class IdeasRepository(
         shrdPref.passCheckBoxSetValue(switch)
     }
 
-    suspend fun setSortedType(sortedType: Int) {
+    suspend fun setSortedType(sortedType: SortTypeEnum) {
         dataStoreManager.setSortedTypeValue(sortedType)
     }
 
-    suspend fun setTheme(theme: Int) {
+    suspend fun setTheme(theme: ThemeEnum) {
         dataStoreManager.setThemeValue(theme)
     }
 
