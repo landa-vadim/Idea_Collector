@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
-        android:name="domain.application.IdeasApplication"
+        android:name="IdeasApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -14,10 +14,10 @@
         android:theme="@style/Theme.IdeaCollector"
         tools:targetApi="31">
         <activity
-            android:name="presentation.SettingsActivity"
+            android:name=".presentation.ui.SettingsActivity"
             android:exported="false" />
         <activity
-            android:name="presentation.MainActivity"
+            android:name=".presentation.ui.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,19 +28,3 @@
     </application>
 
 </manifest>
-
-<!--    // standart-->
-<!--    // MainActivity -> SettingsActivity -> MainActivity -> SettingsActivity-->
-
-<!--    // singleInstance-->
-<!--    // MainActivity -> SettingsActivity ->-->
-
-<!--    // presentation / UI layer-->
-<!--    // Activity / Fragment  - то что видит пользователь-->
-<!--    // ViewModel-->
-
-<!--    // domain-->
-<!--    // сущности, интерфейсы, бизнес-логика-->
-
-<!--    // data-->
-<!--    // имплементации интерфейсов репозиториев, работа с андроид специфичными вещами, например, БД-->

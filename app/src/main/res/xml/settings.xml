@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
 
     <Preference
         android:key="title"
@@ -22,7 +24,7 @@
 
     <Preference  android:key="sortType"
         android:title="Sort type"
-        android:summary="Date"
+        tools:summary="Date"
         />
 
     <Preference  android:key="theme"
