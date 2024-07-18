@@ -1,7 +1,9 @@
 package com.landa.ideacollector.presentation.ui
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.preference.CheckBoxPreference
@@ -22,6 +24,11 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 preferenceScreen.getPreference(3).summary = sortedType.toString()
             }
         }
+        viewLifecycleOwner.lifecycleScope.launch {
+            settingsViewModel.themeFlow.collect { theme ->
+                preferenceScreen.getPreference(4).summary = theme.toString()
+            }
+        }
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -36,6 +43,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
             true
         }
         preferenceScreen.getPreference(2).setOnPreferenceClickListener {
+            PasswordSetDialog().show(parentFragmentManager, "password_set_dialog")
             true
         }
         preferenceScreen.getPreference(3).setOnPreferenceClickListener {
@@ -47,11 +55,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
         preferenceScreen.getPreference(4).setOnPreferenceClickListener {
             settingsViewModel.viewModelScope.launch {
                 settingsViewModel.changeTheme()
-            }
-            settingsViewModel.viewModelScope.launch {
-                settingsViewModel.themeFlow.collect { theme ->
-                    it.summary = theme.toString()
-                }
             }
             true
         }

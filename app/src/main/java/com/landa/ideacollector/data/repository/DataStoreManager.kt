@@ -5,6 +5,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import com.landa.ideacollector.domain.model.SortTypeEnum
 import com.landa.ideacollector.domain.model.ThemeEnum
 import kotlinx.coroutines.flow.map
@@ -14,6 +15,12 @@ class DataStoreManager(val dataStore: DataStore<Preferences>) {
     suspend fun passCheckBoxSetState(checkBoxState: Boolean) {
         dataStore.edit { pref ->
             pref[booleanPreferencesKey("pass_check_box_state")] = checkBoxState
+        }
+    }
+
+    suspend fun passSetValue(pass: String) {
+        dataStore.edit { pref ->
+            pref[stringPreferencesKey("pass")] = pass
         }
     }
 
@@ -40,7 +47,11 @@ class DataStoreManager(val dataStore: DataStore<Preferences>) {
     fun passCheckBoxGetState() = dataStore.data
         .map { pref ->
             pref[booleanPreferencesKey("pass_check_box_state")] ?: false
+        }
 
+    fun passGetValue() = dataStore.data
+        .map { pref ->
+            pref[stringPreferencesKey("pass")] ?: "0000"
         }
 
     fun sortTypeGetValue() = dataStore.data

@@ -12,6 +12,10 @@ class DatastoreSettingsRepository(
         dataStoreManager.passCheckBoxSetState(state)
     }
 
+    override suspend fun passSetValue(pass: String) {
+        dataStoreManager.passSetValue(pass)
+    }
+
     override suspend fun sortedTypeSet(sortedType: SortTypeEnum) {
         dataStoreManager.sortedTypeSetValue(sortedType)
     }
@@ -21,6 +25,8 @@ class DatastoreSettingsRepository(
     }
 
     override val passCheckBoxState: Flow<Boolean> = dataStoreManager.passCheckBoxGetState()
+
+    override val pass: Flow<String> = dataStoreManager.passGetValue()
 
     override val sortedType: Flow<SortTypeEnum> = dataStoreManager.sortTypeGetValue()
 

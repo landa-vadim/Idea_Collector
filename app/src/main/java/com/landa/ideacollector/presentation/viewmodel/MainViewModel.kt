@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.util.Date
 
-class IdeasViewModel(
+class MainViewModel(
     private val ideasRepository: IdeasRepository,
     private val settingsRepository: SettingsRepository
 ) : ViewModel() {

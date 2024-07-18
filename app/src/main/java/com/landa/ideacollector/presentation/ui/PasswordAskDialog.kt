@@ -7,9 +7,15 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.lifecycleScope
 import com.landa.ideacollector.R
+import com.landa.ideacollector.presentation.viewmodel.SettingsViewModel
+import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PasswordAskDialog : DialogFragment() {
+
+    val settingsViewModel: SettingsViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,6 +36,9 @@ class PasswordAskDialog : DialogFragment() {
         }
         okBtn.setOnClickListener {
             val enteredPass = passwordEt.text.toString()
+            viewLifecycleOwner.lifecycleScope.launch {
+                if(settingsViewModel.userEnteredPassword(enteredPass)) dismiss()
+            }
         }
     }
 }

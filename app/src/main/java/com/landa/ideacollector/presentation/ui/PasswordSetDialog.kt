@@ -8,10 +8,15 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.lifecycleScope
 import com.landa.ideacollector.R
-import com.landa.ideacollector.domain.model.Password
+import com.landa.ideacollector.presentation.viewmodel.SettingsViewModel
+import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PasswordSetDialog : DialogFragment() {
+
+    private val settingsViewModel by viewModel<SettingsViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,15 +41,16 @@ class PasswordSetDialog : DialogFragment() {
             val enteredPass = passwordEt.text.toString()
             val enteredConfirm = confirmEt.text.toString()
             if (enteredPass.isNotEmpty() && enteredPass == enteredConfirm) {
-                val pass = Password(enteredPass)
+                viewLifecycleOwner.lifecycleScope.launch {
+                    settingsViewModel.userSetPassword(enteredPass)
+                }
                 dismiss()
             }
             if (enteredPass.isEmpty() || enteredConfirm.isEmpty()) {
-                Toast.makeText(context, "One of lines is empty", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "One of lines is empty", Toast.LENGTH_SHORT).show()
             }
             if (enteredPass != enteredConfirm) {
-                Toast.makeText(context, "Passwords not the same", Toast.LENGTH_LONG)
-                    .show()
+                Toast.makeText(context, "Passwords not the same", Toast.LENGTH_SHORT).show()
             }
         }
     }
