@@ -69,8 +69,8 @@ class SettingsViewModel(
 
     suspend fun userEnteredPassword(enteredPass: String): Boolean {
         val job = viewModelScope.launch {
-            passFlow.collect { settedPassword ->
-                if (enteredPass == settedPassword) {
+            passFlow.collect { setPassword ->
+                if (enteredPass == setPassword) {
                     ideasIsLocked = false
                     viewModelScope.cancel()
                 }
