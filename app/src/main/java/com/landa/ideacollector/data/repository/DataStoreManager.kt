@@ -1,37 +1,49 @@
 package com.landa.ideacollector.data.repository
 
-import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
 import com.landa.ideacollector.domain.model.SortTypeEnum
 import com.landa.ideacollector.domain.model.ThemeEnum
 import kotlinx.coroutines.flow.map
 
 class DataStoreManager(val dataStore: DataStore<Preferences>) {
-    suspend fun setSortedTypeValue(sortType: SortTypeEnum) {
+
+    suspend fun passCheckBoxSetState(checkBoxState: Boolean) {
+        dataStore.edit { pref ->
+            pref[booleanPreferencesKey("pass_check_box_state")] = checkBoxState
+        }
+    }
+
+    suspend fun sortedTypeSetValue(sortType: SortTypeEnum) {
         dataStore.edit { pref ->
             pref[intPreferencesKey("sort_type")] =
-                when(sortType) {
+                when (sortType) {
                     SortTypeEnum.DATE -> 0
                     SortTypeEnum.PRIORITY -> 1
                 }
         }
     }
 
-    suspend fun setThemeValue(theme: ThemeEnum) {
+    suspend fun themeSetValue(theme: ThemeEnum) {
         dataStore.edit { pref ->
             pref[intPreferencesKey("theme")] =
-                when(theme) {
-                   ThemeEnum.LIGHT -> 0
-                   ThemeEnum.DARK -> 1
+                when (theme) {
+                    ThemeEnum.LIGHT -> 0
+                    ThemeEnum.DARK -> 1
                 }
         }
     }
 
-    fun getSortTypeValue() = dataStore.data
+    fun passCheckBoxGetState() = dataStore.data
+        .map { pref ->
+            pref[booleanPreferencesKey("pass_check_box_state")] ?: false
+
+        }
+
+    fun sortTypeGetValue() = dataStore.data
         .map { pref ->
             val sortType = pref[intPreferencesKey("sort_type")] ?: 0
             when (sortType) {
@@ -41,7 +53,7 @@ class DataStoreManager(val dataStore: DataStore<Preferences>) {
             }
         }
 
-    fun getThemeValue() = dataStore.data
+    fun themeGetValue() = dataStore.data
         .map { pref ->
             val theme = pref[intPreferencesKey("theme")] ?: 0
             when (theme) {
@@ -50,5 +62,6 @@ class DataStoreManager(val dataStore: DataStore<Preferences>) {
                 else -> ThemeEnum.LIGHT
             }
         }
+
 
 }

@@ -12,13 +12,15 @@ import com.landa.ideacollector.R
 import com.landa.ideacollector.databinding.ActivityMainBinding
 import com.landa.ideacollector.presentation.adapter.IdeaAdapter
 import com.landa.ideacollector.presentation.viewmodel.IdeasViewModel
+import com.landa.ideacollector.presentation.viewmodel.SettingsViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val adapter = IdeaAdapter()
-    private val viewModel by viewModel<IdeasViewModel>()
+    private val ideasViewModel by viewModel<IdeasViewModel>()
+    private val settingsViewModel by viewModel<SettingsViewModel>()
 
     private var colorIndex = 0
     private val colorList = listOf(R.color.red, R.color.yellow, R.color.green)
@@ -29,33 +31,29 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.getSortedIdeas().collect {
+                ideasViewModel.getSortedIdeas().collect {
                     adapter.setData(it)
                 }
             }
         }
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.sortedTypeFlow.collect {
-
-                }
+                settingsViewModel.themeFlow.value
             }
         }
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.themeFlow.collect {
-
-                }
+                val passCheckBoxState = settingsViewModel.passCheckBoxState.value
+                lockCheckBox(passCheckBoxState)
             }
         }
-        lockCheckBox(viewModel.passCheckBoxState())
         binding.apply {
             ideasList.layoutManager = LinearLayoutManager(this@MainActivity)
             ideasList.adapter = adapter
             doneImageButton.setOnClickListener {
                 val ideaText = ideaEditText.text.toString()
                 ideaEditText.text.clear()
-                viewModel.userClickedDoneButton(ideaText, colorIndex)
+                ideasViewModel.userClickedDoneButton(ideaText, colorIndex)
             }
             priorityImageButton.setOnClickListener {
                 changePriorityColor()
@@ -73,9 +71,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun lockCheckBox(isChecked: Boolean) {
+    private fun lockCheckBox(passCheckBoxState: Boolean) {
         var visability = View.INVISIBLE
-        if (isChecked) visability = View.VISIBLE
+        if (passCheckBoxState) visability = View.VISIBLE
         binding.lockImageView.visibility = visability
         binding.bg1ImageView.visibility = visability
         binding.bg2ImageView.visibility = visability

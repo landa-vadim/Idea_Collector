@@ -7,18 +7,18 @@ import androidx.lifecycle.viewModelScope
 import androidx.preference.CheckBoxPreference
 import androidx.preference.PreferenceFragmentCompat
 import com.landa.ideacollector.R
-import com.landa.ideacollector.presentation.viewmodel.IdeasViewModel
+import com.landa.ideacollector.presentation.viewmodel.SettingsViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsFragment : PreferenceFragmentCompat() {
 
-    private val viewModel by viewModel<IdeasViewModel>()
+    private val settingsViewModel by viewModel<SettingsViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.sortedTypeFlow.collect { sortedType ->
+            settingsViewModel.sortedTypeFlow.collect { sortedType ->
                 preferenceScreen.getPreference(3).summary = sortedType.toString()
             }
         }
@@ -27,13 +27,11 @@ class SettingsFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.settings, rootKey)
 
-
         val checkBoxPreference = preferenceScreen.getPreference(1) as CheckBoxPreference
         preferenceScreen.getPreference(1).setOnPreferenceClickListener {
-            if (checkBoxPreference.isChecked) {
-                viewModel.userSwitchedPassCheckBox(true)
-            } else {
-                viewModel.userSwitchedPassCheckBox(false)
+            val checkBoxState = checkBoxPreference.isChecked
+            viewLifecycleOwner.lifecycleScope.launch {
+                settingsViewModel.userSwitchedPassCheckBox(checkBoxState)
             }
             true
         }
@@ -41,17 +39,17 @@ class SettingsFragment : PreferenceFragmentCompat() {
             true
         }
         preferenceScreen.getPreference(3).setOnPreferenceClickListener {
-            viewModel.viewModelScope.launch {
-                viewModel.changeSortType()
+            settingsViewModel.viewModelScope.launch {
+                settingsViewModel.changeSortType()
             }
             true
         }
         preferenceScreen.getPreference(4).setOnPreferenceClickListener {
-            viewModel.viewModelScope.launch {
-                viewModel.changeTheme()
+            settingsViewModel.viewModelScope.launch {
+                settingsViewModel.changeTheme()
             }
-            viewModel.viewModelScope.launch {
-                viewModel.themeFlow.collect { theme ->
+            settingsViewModel.viewModelScope.launch {
+                settingsViewModel.themeFlow.collect { theme ->
                     it.summary = theme.toString()
                 }
             }

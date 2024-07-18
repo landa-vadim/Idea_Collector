@@ -5,16 +5,14 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.landa.ideacollector.domain.model.Idea
-import com.landa.ideacollector.domain.model.Password
 
 @Database(
-    entities = [Idea::class, Password::class],
+    entities = [Idea::class],
     version = 1,
     exportSchema = true,
 )
 abstract class MainDb : RoomDatabase() {
-    abstract fun getDao(): Dao
-    abstract fun getDaoPass(): DaoPass
+    abstract fun getIdeasDao(): IdeasDao
 
     companion object DatabaseManager {
         private var instance: MainDb? = null

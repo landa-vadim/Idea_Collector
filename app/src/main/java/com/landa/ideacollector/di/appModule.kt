@@ -1,12 +1,16 @@
 package com.landa.ideacollector.di
 
 import com.landa.ideacollector.presentation.viewmodel.IdeasViewModel
+import com.landa.ideacollector.presentation.viewmodel.SettingsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val appModule = module {
     viewModel<IdeasViewModel>{
-        IdeasViewModel(repository = get(), settingsRepository = get())
+        IdeasViewModel(ideasRepository = get(), settingsRepository = get())
+    }
+    viewModel<SettingsViewModel>{
+        SettingsViewModel(settingsRepository = get())
     }
 
 }

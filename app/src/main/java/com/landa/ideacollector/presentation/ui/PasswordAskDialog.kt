@@ -6,15 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModel
 import com.landa.ideacollector.R
 
 class PasswordAskDialog : DialogFragment() {
-
-    private val dataModel: ViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

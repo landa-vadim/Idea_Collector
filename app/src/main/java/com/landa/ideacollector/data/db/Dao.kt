@@ -7,7 +7,7 @@ import com.landa.ideacollector.domain.model.Idea
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface Dao {
+interface IdeasDao {
     @Insert
     suspend fun insertIdea(item: Idea)
     @Query("SELECT * FROM items")
