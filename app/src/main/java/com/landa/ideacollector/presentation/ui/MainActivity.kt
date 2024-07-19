@@ -43,10 +43,9 @@ class MainActivity : AppCompatActivity() {
         }
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
+                lockCheckBox(settingsViewModel.ideasIsLocked)
                 settingsViewModel.passCheckBoxState.collect { state ->
-                    if (state) {
-                        lockCheckBox(settingsViewModel.ideasIsLocked)
-                    }
+                    lockCheckBox(state)
                 }
             }
         }
@@ -77,12 +76,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun lockCheckBox(passCheckBoxState: Boolean) {
-        var visability = View.INVISIBLE
-        if (passCheckBoxState) visability = View.VISIBLE
-        binding.lockImageView.visibility = visability
-        binding.bg1ImageView.visibility = visability
-        binding.bg2ImageView.visibility = visability
-        binding.bg3ImageView.visibility = visability
+        val visibility =
+            if (passCheckBoxState) View.VISIBLE
+            else View.INVISIBLE
+        binding.lockImageView.visibility = visibility
+        binding.bg1ImageView.visibility = visibility
+        binding.bg2ImageView.visibility = visibility
+        binding.bg3ImageView.visibility = visibility
     }
 
 

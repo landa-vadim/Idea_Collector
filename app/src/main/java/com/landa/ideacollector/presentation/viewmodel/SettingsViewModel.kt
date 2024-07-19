@@ -7,14 +7,12 @@ import com.landa.ideacollector.domain.model.SortTypeEnum
 import com.landa.ideacollector.domain.model.ThemeEnum
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class SettingsViewModel(
     private val settingsRepository: SettingsRepository
 ) : ViewModel() {
-
     var ideasIsLocked = true
 
     val passCheckBoxState = settingsRepository.passCheckBoxState.stateIn(
@@ -23,7 +21,7 @@ class SettingsViewModel(
         false
     )
 
-    val passFlow = settingsRepository.pass.stateIn(
+    val passFlow = settingsRepository.passFlow.stateIn(
         viewModelScope,
         SharingStarted.Lazily,
         "0000"
@@ -68,15 +66,9 @@ class SettingsViewModel(
     }
 
     suspend fun userEnteredPassword(enteredPass: String): Boolean {
-        val job = viewModelScope.launch {
-            passFlow.collect { setPassword ->
-                if (enteredPass == setPassword) {
-                    ideasIsLocked = false
-                    viewModelScope.cancel()
-                }
-            }
-        }
-        if (job.isCancelled) return true
-        else return false
+        if (settingsRepository.isPassCorrect(enteredPass)) {
+            ideasIsLocked = false
+            return true
+        } else return ideasIsLocked
     }
 }
