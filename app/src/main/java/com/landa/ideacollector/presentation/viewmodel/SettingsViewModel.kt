@@ -5,35 +5,32 @@ import androidx.lifecycle.viewModelScope
 import com.landa.ideacollector.domain.interfaces.SettingsRepository
 import com.landa.ideacollector.domain.model.SortTypeEnum
 import com.landa.ideacollector.domain.model.ThemeEnum
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 
 class SettingsViewModel(
     private val settingsRepository: SettingsRepository
 ) : ViewModel() {
-    var ideasIsLocked = true
 
-    val passCheckBoxState = settingsRepository.passCheckBoxState.stateIn(
+    val passCheckBoxStateFlow = settingsRepository.passCheckBoxStateFlow.stateIn(
         viewModelScope,
         SharingStarted.Lazily,
         false
     )
 
-    val passFlow = settingsRepository.passFlow.stateIn(
+    val passLockStateFlow = settingsRepository.passLockStateFlow.stateIn(
         viewModelScope,
         SharingStarted.Lazily,
-        "0000"
+        false
     )
 
-    val sortedTypeFlow = settingsRepository.sortedType.stateIn(
+    val sortedTypeFlow = settingsRepository.sortedTypeFlow.stateIn(
         viewModelScope,
         SharingStarted.Lazily,
         SortTypeEnum.DATE
     )
 
-    val themeFlow = settingsRepository.theme.stateIn(
+    val themeFlow = settingsRepository.themeFlow.stateIn(
         viewModelScope,
         SharingStarted.Lazily,
         ThemeEnum.LIGHT
@@ -66,9 +63,10 @@ class SettingsViewModel(
     }
 
     suspend fun userEnteredPassword(enteredPass: String): Boolean {
-        if (settingsRepository.isPassCorrect(enteredPass)) {
-            ideasIsLocked = false
-            return true
-        } else return ideasIsLocked
+        return settingsRepository.isPassCorrect(enteredPass)
+    }
+
+    suspend fun renewIdeasLockState() {
+        settingsRepository.passLockSetState(false)
     }
 }

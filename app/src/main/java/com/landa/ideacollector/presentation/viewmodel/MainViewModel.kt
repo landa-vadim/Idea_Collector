@@ -23,7 +23,7 @@ class MainViewModel(
         SharingStarted.Lazily,
         emptyList()
     )
-    private val sortedTypeFlow = settingsRepository.sortedType.stateIn(
+    private val sortedTypeFlow = settingsRepository.sortedTypeFlow.stateIn(
         viewModelScope,
         SharingStarted.Lazily,
         SortTypeEnum.DATE

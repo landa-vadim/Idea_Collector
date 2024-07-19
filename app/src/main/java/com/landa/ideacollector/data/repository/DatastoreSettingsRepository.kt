@@ -9,16 +9,28 @@ import kotlinx.coroutines.flow.first
 class DatastoreSettingsRepository(
     private val dataStoreManager: DataStoreManager
 ) : SettingsRepository {
-    override val passCheckBoxState: Flow<Boolean> = dataStoreManager.passCheckBoxGetState()
+    override val passCheckBoxStateFlow: Flow<Boolean> = dataStoreManager.passCheckBoxGetState()
+
+    override val passLockStateFlow: Flow<Boolean> = dataStoreManager.passLockGetState()
 
     override val passFlow: Flow<String> = dataStoreManager.passGetValue()
 
-    override val sortedType: Flow<SortTypeEnum> = dataStoreManager.sortTypeGetValue()
+    override val sortedTypeFlow: Flow<SortTypeEnum> = dataStoreManager.sortTypeGetValue()
 
-    override val theme: Flow<ThemeEnum> = dataStoreManager.themeGetValue()
+    override val themeFlow: Flow<ThemeEnum> = dataStoreManager.themeGetValue()
 
     override suspend fun passCheckBoxSetState(state: Boolean) {
         dataStoreManager.passCheckBoxSetState(state)
+    }
+
+    override suspend fun passLockSetState(passLockState: Boolean) {
+        dataStoreManager.passLockState(passLockState)
+    }
+
+    override suspend fun isPassCorrect(enteredPass: String): Boolean {
+        val lockIsGone = passFlow.first() == enteredPass
+        passLockSetState(lockIsGone)
+        return lockIsGone
     }
 
     override suspend fun passSetValue(pass: String) {
@@ -33,7 +45,5 @@ class DatastoreSettingsRepository(
         dataStoreManager.themeSetValue(theme)
     }
 
-    override suspend fun isPassCorrect(enteredPass: String): Boolean {
-        return passFlow.first() == enteredPass
-    }
+
 }

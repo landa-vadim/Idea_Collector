@@ -18,6 +18,12 @@ class DataStoreManager(val dataStore: DataStore<Preferences>) {
         }
     }
 
+    suspend fun passLockState(isLockActive: Boolean) {
+        dataStore.edit { pref ->
+            pref[booleanPreferencesKey("pass_lock_state")] = isLockActive
+        }
+    }
+
     suspend fun passSetValue(pass: String) {
         dataStore.edit { pref ->
             pref[stringPreferencesKey("pass")] = pass
@@ -46,7 +52,14 @@ class DataStoreManager(val dataStore: DataStore<Preferences>) {
 
     fun passCheckBoxGetState() = dataStore.data
         .map { pref ->
-            pref[booleanPreferencesKey("pass_check_box_state")] ?: false
+            val a = pref[booleanPreferencesKey("pass_check_box_state")] ?: false
+            a
+        }
+
+    fun passLockGetState() = dataStore.data
+        .map { pref ->
+            val a = pref[booleanPreferencesKey("pass_lock_state")] ?: false
+            a
         }
 
     fun passGetValue() = dataStore.data
