@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 settingsViewModel.passLockStateFlow.collect { state ->
-                    if (settingsViewModel.passCheckBoxStateFlow.value) lockIdeas(!state)
+                    if (settingsViewModel.passCheckBoxStateFlow.value) lockIdeas(state)
                 }
             }
         }

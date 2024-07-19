@@ -21,7 +21,7 @@ class SettingsViewModel(
     val passLockStateFlow = settingsRepository.passLockStateFlow.stateIn(
         viewModelScope,
         SharingStarted.Lazily,
-        false
+        true
     )
 
     val sortedTypeFlow = settingsRepository.sortedTypeFlow.stateIn(
@@ -67,6 +67,6 @@ class SettingsViewModel(
     }
 
     suspend fun renewIdeasLockState() {
-        settingsRepository.passLockSetState(false)
+        settingsRepository.passLockSetState(true)
     }
 }

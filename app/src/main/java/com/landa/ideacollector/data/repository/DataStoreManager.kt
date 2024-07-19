@@ -58,8 +58,7 @@ class DataStoreManager(val dataStore: DataStore<Preferences>) {
 
     fun passLockGetState() = dataStore.data
         .map { pref ->
-            val a = pref[booleanPreferencesKey("pass_lock_state")] ?: false
-            a
+            pref[booleanPreferencesKey("pass_lock_state")] ?: true
         }
 
     fun passGetValue() = dataStore.data

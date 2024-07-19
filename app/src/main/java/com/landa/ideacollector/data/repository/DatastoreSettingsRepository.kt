@@ -28,9 +28,10 @@ class DatastoreSettingsRepository(
     }
 
     override suspend fun isPassCorrect(enteredPass: String): Boolean {
-        val lockIsGone = passFlow.first() == enteredPass
-        passLockSetState(lockIsGone)
-        return lockIsGone
+        val isPassCorrect = passFlow.first() == enteredPass
+        val openIdeas = !isPassCorrect
+        passLockSetState(openIdeas)
+        return isPassCorrect
     }
 
     override suspend fun passSetValue(pass: String) {
