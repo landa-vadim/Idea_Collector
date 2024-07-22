@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.landa.ideacollector.R
 import com.landa.ideacollector.databinding.ActivityMainBinding
+import com.landa.ideacollector.domain.model.ThemeEnum
 import com.landa.ideacollector.presentation.adapter.IdeaAdapter
 import com.landa.ideacollector.presentation.viewmodel.MainViewModel
 import com.landa.ideacollector.presentation.viewmodel.SettingsViewModel
@@ -38,7 +39,10 @@ class MainActivity : AppCompatActivity() {
         }
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                settingsViewModel.themeFlow
+                settingsViewModel.themeFlow.collect { state ->
+                themeSetResources(state)
+
+                }
             }
         }
         lifecycleScope.launch {
@@ -98,5 +102,11 @@ class MainActivity : AppCompatActivity() {
         binding.bg1ImageView.visibility = visibility
         binding.bg2ImageView.visibility = visibility
         binding.bg3ImageView.visibility = visibility
+    }
+    private fun themeSetResources(theme: ThemeEnum) {
+        when (theme) {
+            ThemeEnum.LIGHT -> binding.doneImageButton.setImageResource(R.drawable.ic_done)
+            ThemeEnum.DARK -> binding.doneImageButton.setImageResource(R.drawable.ic_done_dark)
+        }
     }
 }
