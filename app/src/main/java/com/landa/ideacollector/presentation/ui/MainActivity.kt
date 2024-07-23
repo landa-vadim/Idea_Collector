@@ -116,8 +116,9 @@ class MainActivity : AppCompatActivity(), RecyclerViewListener {
 
     override fun onLongClick(idea: Idea) {
         val args = Bundle()
-        args.putString("idea", "ideas")
-        IdeasMenuDialog().arguments
-        IdeasMenuDialog().show(supportFragmentManager, "ideas_menu_dialog")
+        args.putParcelable("idea", idea)
+        val ideasMenuDialog = IdeasMenuDialog()
+        ideasMenuDialog.arguments = args
+        ideasMenuDialog.show(supportFragmentManager, "ideas_menu_dialog")
     }
 }

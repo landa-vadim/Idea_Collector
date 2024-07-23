@@ -31,15 +31,21 @@ class IdeasMenuDialog : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         val editIdea = view.findViewById<TextView>(R.id.menuEditIdea)
         val deleteIdea = view.findViewById<TextView>(R.id.menuDeleteIdea)
-        val idea = arguments?.getString("idea")
+        val idea = arguments?.getParcelable("idea") as Idea?
         editIdea.setOnClickListener {
             viewLifecycleOwner.lifecycleScope.launch {
-                if (idea != null) Toast.makeText(context, "STRING", Toast.LENGTH_SHORT).show()//mainViewModel.userClickedEditIdea(idea)
+                if (idea != null) {
+                    mainViewModel.userClickedEditIdea(idea)
+                    dismiss()
+                } else Toast.makeText(context, "idea is not found", Toast.LENGTH_SHORT).show()
             }
         }
         deleteIdea.setOnClickListener {
             viewLifecycleOwner.lifecycleScope.launch {
-//                if (idea != null) mainViewModel.userClickedDeleteIdea(idea)
+                if (idea != null) {
+                    mainViewModel.userClickedDeleteIdea(idea)
+                    dismiss()
+                }else Toast.makeText(context, "idea is not found", Toast.LENGTH_SHORT).show()
             }
         }
     }
