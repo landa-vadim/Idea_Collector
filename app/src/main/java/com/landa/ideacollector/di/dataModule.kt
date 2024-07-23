@@ -30,7 +30,7 @@ val dataModule = module {
         DataStoreManager(dataStore = get())
     }
     single<IdeasRepository> {
-        RoomIdeasRepository(dao = get())
+        RoomIdeasRepository(ideasDao = get())
     }
     single<SettingsRepository> {
         DatastoreSettingsRepository(dataStoreManager = get())

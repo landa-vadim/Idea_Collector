@@ -6,4 +6,6 @@ import kotlinx.coroutines.flow.Flow
 interface IdeasRepository {
     val ideasList: Flow<List<Idea>>
     suspend fun insertIdea(idea: Idea)
+    suspend fun deleteIdea(idea: Idea)
+    suspend fun editIdea(idea: Idea)
 }

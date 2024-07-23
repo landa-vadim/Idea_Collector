@@ -6,12 +6,20 @@ import com.landa.ideacollector.domain.model.Idea
 import kotlinx.coroutines.flow.Flow
 
 class RoomIdeasRepository(
-    private val dao: IdeasDao
+    private val ideasDao: IdeasDao
 ) : IdeasRepository {
 
-    override val ideasList: Flow<List<Idea>> = dao.getAllItems()
+    override val ideasList: Flow<List<Idea>> = ideasDao.getAllItems()
 
     override suspend fun insertIdea(idea: Idea) {
-        dao.insertIdea(idea)
+        ideasDao.insertIdea(idea)
+    }
+
+    override suspend fun deleteIdea(idea: Idea) {
+        ideasDao.deleteIdea(idea.id)
+    }
+
+    override suspend fun editIdea(idea: Idea) {
+        ideasDao.editIdea(idea)
     }
 }

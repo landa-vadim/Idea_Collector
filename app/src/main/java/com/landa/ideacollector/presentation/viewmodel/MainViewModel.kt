@@ -51,4 +51,10 @@ class MainViewModel(
         )
         viewModelScope.launch { ideasRepository.insertIdea(idea) }
     }
+    suspend fun userClickedDeleteIdea(idea: Idea) {
+        ideasRepository.deleteIdea(idea)
+    }
+    suspend fun userClickedEditIdea(idea: Idea) {
+        ideasRepository.editIdea(idea)
+    }
 }

@@ -1,5 +1,5 @@
 [versions]
-agp = "8.4.0"
+agp = "8.4.2"
 kotlin = "2.0.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
@@ -17,6 +17,7 @@ viewModel = "2.8.3"
 fragment =  "1.8.1"
 koin-bom = "3.5.6"
 datastoreCoreAndroid = "1.1.1"
+kotlinParcelize = "2.0.0"
 
 [libraries]
 koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin-bom" }
@@ -41,6 +42,7 @@ androidx-datastore-core-android = { group = "androidx.datastore", name = "datast
 androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastoreCoreAndroid"}
 
 [plugins]
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlinParcelize"}
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "kspVersion" }

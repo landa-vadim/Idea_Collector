@@ -9,14 +9,16 @@ import com.landa.ideacollector.R
 import com.landa.ideacollector.databinding.IdeasItemBinding
 import com.landa.ideacollector.domain.model.Idea
 import com.landa.ideacollector.domain.model.Priority
+import com.landa.ideacollector.presentation.interfaces.RecyclerViewListener
 
-class IdeaAdapter : RecyclerView.Adapter<IdeaAdapter.IdeasHolder>() {
+class IdeaAdapter(private val listener: RecyclerViewListener) :
+    RecyclerView.Adapter<IdeaAdapter.IdeasHolder>() {
     private var ideasList = mutableListOf<Idea>()
 
     class IdeasHolder(item: View) : RecyclerView.ViewHolder(item) {
-        val binding = IdeasItemBinding.bind(item)
+        private val binding = IdeasItemBinding.bind(item)
 
-        fun bind(idea: Idea) = with(binding) {
+        fun bind(idea: Idea, listener: RecyclerViewListener) = with(binding) {
             val backgroundColor = when (idea.priority) {
                 Priority.HIGH -> R.color.red
                 Priority.MEDIUM -> R.color.yellow
@@ -25,6 +27,10 @@ class IdeaAdapter : RecyclerView.Adapter<IdeaAdapter.IdeasHolder>() {
             priorityImageButton.setBackgroundResource(backgroundColor)
             tvIdea.text = idea.idea
             tvIdeaDate.text = idea.date
+            itemView.setOnLongClickListener {
+                listener.onLongClick(idea)
+                true
+            }
         }
     }
 
@@ -34,7 +40,7 @@ class IdeaAdapter : RecyclerView.Adapter<IdeaAdapter.IdeasHolder>() {
     }
 
     override fun onBindViewHolder(holder: IdeasHolder, position: Int) {
-        holder.bind(ideasList[position])
+        holder.bind(ideasList[position], listener)
     }
 
     override fun getItemCount(): Int {
