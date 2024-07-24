@@ -26,9 +26,6 @@ class MainActivity : AppCompatActivity(), RecyclerViewListener {
     private val mainViewModel by viewModel<MainViewModel>()
     private val settingsViewModel by viewModel<SettingsViewModel>()
 
-    private var colorIndex = 0
-    private val colorList = listOf(R.color.red, R.color.yellow, R.color.green)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -68,11 +65,10 @@ class MainActivity : AppCompatActivity(), RecyclerViewListener {
             doneImageButton.setOnClickListener {
                 val ideaText = ideaEditText.text.toString()
                 ideaEditText.text.clear()
-                mainViewModel.userClickedDoneButton(ideaText, colorIndex)
+                mainViewModel.userClickedDoneButton(ideaText)
             }
             priorityImageButton.setOnClickListener {
-                if (colorIndex > 1) colorIndex = -1
-                binding.priorityImageButton.setBackgroundColor(getColor(colorList[++colorIndex]))
+                binding.priorityImageButton.setBackgroundColor(getColor(mainViewModel.userClickedPriorityButton()))
             }
             doneImageButton.setOnLongClickListener {
                 val etIdeaText = ideaEditText.text

@@ -2,6 +2,7 @@ package com.landa.ideacollector.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.landa.ideacollector.R
 import com.landa.ideacollector.domain.interfaces.IdeasRepository
 import com.landa.ideacollector.domain.interfaces.SettingsRepository
 import com.landa.ideacollector.domain.model.Idea
@@ -18,6 +19,8 @@ class MainViewModel(
     private val settingsRepository: SettingsRepository
 ) : ViewModel() {
 
+    private var colorIndex = 0
+    private val colorList = listOf(R.color.red, R.color.yellow, R.color.green)
     private val ideasListFlow = ideasRepository.ideasList.stateIn(
         viewModelScope,
         SharingStarted.Lazily,
@@ -37,8 +40,8 @@ class MainViewModel(
             }
         }
 
-    fun userClickedDoneButton(string: String, color: Int) {
-        val ideaPriority = when (color) {
+    fun userClickedDoneButton(string: String) {
+        val ideaPriority = when (colorIndex) {
             0 -> Priority.HIGH
             1 -> Priority.MEDIUM
             2 -> Priority.LOW
@@ -56,5 +59,10 @@ class MainViewModel(
     }
     suspend fun userClickedEditIdea(idea: Idea) {
         ideasRepository.editIdea(idea)
+    }
+
+    fun userClickedPriorityButton(): Int {
+        if (colorIndex > 1) colorIndex = -1
+        return colorList[++colorIndex]
     }
 }
