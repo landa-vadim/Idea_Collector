@@ -1,6 +1,5 @@
 package com.landa.ideacollector.presentation.ui
 
-import android.content.res.Resources.Theme
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,9 +8,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
-import androidx.core.app.NotificationCompat.getColor
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.color.MaterialColors.getColor
 import com.landa.ideacollector.R
 import com.landa.ideacollector.domain.model.Idea
 import com.landa.ideacollector.presentation.viewmodel.MainViewModel
@@ -34,30 +33,27 @@ class IdeasEditMenuDialog : DialogFragment() {
         val cancelButton = view.findViewById<Button>(R.id.editIdeaCancelButton)
         val okButton = view.findViewById<Button>(R.id.editIdeaOkButton)
         val idea = arguments?.getParcelable("idea") as Idea?
-        var priorityColor = 0x00000
+        var priorityColor = 0
         if (idea != null) {
             editTextIdea.setText(idea.idea)
             priorityColor = mainViewModel.getPriorityColor(idea.priority)
             imageButtonPriority.setBackgroundColor(resources.getColor(priorityColor))
         }
         imageButtonPriority.setOnClickListener {
-            val nextColor = when (resources.getColor(priorityColor)) {
-                R.color.red -> R.color.yellow
-                R.color.yellow -> R.color.green
-                R.color.green -> R.color.red
-                else -> R.color.red
-            }
-            priorityColor = nextColor
-            imageButtonPriority.setBackgroundColor(resources.getColor(priorityColor))
+            imageButtonPriority.setBackgroundColor(resources.getColor(mainViewModel.userClickedPriorityButton()))
         }
         okButton.setOnClickListener {
-            val ideaText = editTextIdea.toString()
+            val ideaText = editTextIdea.text.toString()
             viewLifecycleOwner.lifecycleScope.launch {
-                if (idea != null) mainViewModel.userClickedEditIdea(
-                    idea,
-                    ideaText,
-                    priorityColor
-                )
+                if (idea != null) {
+                    mainViewModel.userClickedEditIdea(
+                        idea,
+                        ideaText,
+                        priorityColor
+                    )
+                    dismiss()
+                }
+
                 else Toast.makeText(context, "Idea is not found", Toast.LENGTH_SHORT).show()
             }
         }
