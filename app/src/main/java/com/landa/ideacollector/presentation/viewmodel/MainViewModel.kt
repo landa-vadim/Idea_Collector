@@ -1,6 +1,7 @@
 package com.landa.ideacollector.presentation.viewmodel
 
 import android.graphics.Color
+import android.icu.text.DateFormat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.landa.ideacollector.R
@@ -41,14 +42,13 @@ class MainViewModel(
             }
         }
 
-    fun userClickedDoneButton(string: String) {
+    fun userClickedDoneButton(ideaText: String) {
         val ideaPriority = when (colorIndex) {
             0 -> Priority.HIGH
             1 -> Priority.MEDIUM
             2 -> Priority.LOW
             else -> return
         }
-        val ideaText = string
         val ideaDate = Date().toString()
         val idea = Idea(
             null, ideaPriority, ideaText, ideaDate
@@ -79,10 +79,11 @@ class MainViewModel(
     }
 
     fun getPriorityColor(priority: Priority): Int {
-        return when (priority) {
-            Priority.HIGH -> R.color.red
-            Priority.MEDIUM -> R.color.yellow
-            Priority.LOW -> R.color.green
+        colorIndex = when (priority) {
+            Priority.HIGH -> 0
+            Priority.MEDIUM -> 1
+            Priority.LOW -> 2
         }
+        return colorList[colorIndex]
     }
 }

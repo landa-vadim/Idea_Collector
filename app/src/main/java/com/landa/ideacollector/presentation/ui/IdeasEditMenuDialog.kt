@@ -10,7 +10,6 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.color.MaterialColors.getColor
 import com.landa.ideacollector.R
 import com.landa.ideacollector.domain.model.Idea
 import com.landa.ideacollector.presentation.viewmodel.MainViewModel
@@ -40,7 +39,8 @@ class IdeasEditMenuDialog : DialogFragment() {
             imageButtonPriority.setBackgroundColor(resources.getColor(priorityColor))
         }
         imageButtonPriority.setOnClickListener {
-            imageButtonPriority.setBackgroundColor(resources.getColor(mainViewModel.userClickedPriorityButton()))
+            priorityColor = mainViewModel.userClickedPriorityButton()
+            imageButtonPriority.setBackgroundColor(resources.getColor(priorityColor))
         }
         okButton.setOnClickListener {
             val ideaText = editTextIdea.text.toString()
