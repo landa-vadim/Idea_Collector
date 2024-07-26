@@ -1,5 +1,6 @@
 package com.landa.ideacollector.presentation.viewmodel
 
+import android.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.landa.ideacollector.R
@@ -54,15 +55,34 @@ class MainViewModel(
         )
         viewModelScope.launch { ideasRepository.insertIdea(idea) }
     }
+
     suspend fun userClickedDeleteIdea(idea: Idea) {
         ideasRepository.deleteIdea(idea)
     }
-    suspend fun userClickedEditIdea(idea: Idea) {
-        ideasRepository.editIdea(idea)
+
+    suspend fun userClickedEditIdea(idea: Idea, ideaText: String, ideaPriorityColor: Int) {
+        val id = idea.id
+        val date = idea.date
+        val ideaPriority = when (ideaPriorityColor) {
+            R.color.red -> Priority.HIGH
+            R.color.yellow -> Priority.MEDIUM
+            R.color.green -> Priority.LOW
+            else -> Priority.HIGH
+        }
+        val newIdea = Idea(id, ideaPriority, ideaText, date)
+        ideasRepository.editIdea(newIdea)
     }
 
     fun userClickedPriorityButton(): Int {
         if (colorIndex > 1) colorIndex = -1
         return colorList[++colorIndex]
+    }
+
+    fun getPriorityColor(priority: Priority): Int {
+        return when (priority) {
+            Priority.HIGH -> R.color.red
+            Priority.MEDIUM -> R.color.yellow
+            Priority.LOW -> R.color.green
+        }
     }
 }
