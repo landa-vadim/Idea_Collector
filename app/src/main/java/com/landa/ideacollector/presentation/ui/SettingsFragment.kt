@@ -1,9 +1,7 @@
 package com.landa.ideacollector.presentation.ui
 
-import android.app.Dialog
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.preference.CheckBoxPreference
@@ -54,7 +52,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }
         preferenceScreen.getPreference(4).setOnPreferenceClickListener {
             settingsViewModel.viewModelScope.launch {
-                settingsViewModel.changeTheme()
+                settingsViewModel.userChangedTheme()
             }
             true
         }

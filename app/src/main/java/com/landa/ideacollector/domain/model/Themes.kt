@@ -1,6 +1,6 @@
 package com.landa.ideacollector.domain.model
 
-enum class ThemeEnum {
+enum class Theme {
     LIGHT,
     DARK
 }

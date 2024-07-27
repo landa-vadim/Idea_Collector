@@ -7,7 +7,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.preference.PreferenceFragmentCompat
-import com.landa.ideacollector.domain.model.ThemeEnum
+import com.landa.ideacollector.domain.model.Theme
 import com.landa.ideacollector.presentation.viewmodel.SettingsViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -32,10 +32,10 @@ class SettingsActivity : AppCompatActivity() {
             .commit()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
-    private fun setTheme(theme: ThemeEnum) {
+    private fun setTheme(theme: Theme) {
         when (theme) {
-            ThemeEnum.LIGHT -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            ThemeEnum.DARK -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            Theme.LIGHT -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            Theme.DARK -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         }
     }
 }

@@ -11,7 +11,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.landa.ideacollector.R
 import com.landa.ideacollector.databinding.ActivityMainBinding
 import com.landa.ideacollector.domain.model.Idea
-import com.landa.ideacollector.domain.model.ThemeEnum
+import com.landa.ideacollector.domain.model.Theme
 import com.landa.ideacollector.presentation.adapter.IdeaAdapter
 import com.landa.ideacollector.presentation.interfaces.RecyclerViewListener
 import com.landa.ideacollector.presentation.viewmodel.MainViewModel
@@ -40,7 +40,6 @@ class MainActivity : AppCompatActivity(), RecyclerViewListener {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 settingsViewModel.themeFlow.collect { state ->
                     themeSetResources(state)
-
                 }
             }
         }
@@ -52,8 +51,8 @@ class MainActivity : AppCompatActivity(), RecyclerViewListener {
             }
         }
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                settingsViewModel.passLockStateFlow.collect { state ->
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                settingsViewModel.ideasIsLockedFlow.collect { state ->
                     if (settingsViewModel.passCheckBoxStateFlow.value) lockIdeas(state)
                 }
             }
@@ -83,29 +82,24 @@ class MainActivity : AppCompatActivity(), RecyclerViewListener {
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        lifecycleScope.launch {
-            settingsViewModel.renewIdeasLockState()
-        }
-    }
-
     private fun lockIdeas(lock: Boolean) {
         val visibility =
             when (lock) {
                 true -> View.VISIBLE
                 false -> View.INVISIBLE
             }
-        binding.lockImageView.visibility = visibility
-        binding.bg1ImageView.visibility = visibility
-        binding.bg2ImageView.visibility = visibility
-        binding.bg3ImageView.visibility = visibility
+        binding.apply {
+            lockImageView.visibility = visibility
+            bg1ImageView.visibility = visibility
+            bg2ImageView.visibility = visibility
+            bg3ImageView.visibility = visibility
+        }
     }
 
-    private fun themeSetResources(theme: ThemeEnum) {
+    private fun themeSetResources(theme: Theme) {
         when (theme) {
-            ThemeEnum.LIGHT -> binding.doneImageButton.setImageResource(R.drawable.ic_done)
-            ThemeEnum.DARK -> binding.doneImageButton.setImageResource(R.drawable.ic_done_dark)
+            Theme.LIGHT -> binding.doneImageButton.setImageResource(R.drawable.ic_done)
+            Theme.DARK -> binding.doneImageButton.setImageResource(R.drawable.ic_done_dark)
         }
     }
 

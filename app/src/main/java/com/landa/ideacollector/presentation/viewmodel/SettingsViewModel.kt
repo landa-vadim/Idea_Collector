@@ -3,70 +3,76 @@ package com.landa.ideacollector.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.landa.ideacollector.domain.interfaces.SettingsRepository
-import com.landa.ideacollector.domain.model.SortTypeEnum
-import com.landa.ideacollector.domain.model.ThemeEnum
+import com.landa.ideacollector.domain.model.SortType
+import com.landa.ideacollector.domain.model.Theme
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 
 class SettingsViewModel(
     private val settingsRepository: SettingsRepository
 ) : ViewModel() {
-
-    val passCheckBoxStateFlow = settingsRepository.passCheckBoxStateFlow.stateIn(
+    val passCheckBoxStateFlow = settingsRepository.isPassEnableStateFlow.stateIn(
         viewModelScope,
         SharingStarted.Lazily,
         false
     )
-
-    val passLockStateFlow = settingsRepository.passLockStateFlow.stateIn(
+    val sortedTypeFlow = settingsRepository.sortedTypeFlow.stateIn(
+        viewModelScope,
+        SharingStarted.Lazily,
+        SortType.DATE
+    )
+    val themeFlow = settingsRepository.themeFlow.stateIn(
+        viewModelScope,
+        SharingStarted.Lazily,
+        Theme.LIGHT
+    )
+    private val _ideasIsLockedFlow = MutableStateFlow(true)
+    val ideasIsLockedFlow = _ideasIsLockedFlow.stateIn(
         viewModelScope,
         SharingStarted.Lazily,
         true
     )
 
-    val sortedTypeFlow = settingsRepository.sortedTypeFlow.stateIn(
-        viewModelScope,
-        SharingStarted.Lazily,
-        SortTypeEnum.DATE
-    )
-
-    val themeFlow = settingsRepository.themeFlow.stateIn(
-        viewModelScope,
-        SharingStarted.Lazily,
-        ThemeEnum.LIGHT
-    )
-
     suspend fun userSwitchedPassCheckBox(state: Boolean) {
-        settingsRepository.passCheckBoxSetState(state)
+        settingsRepository.setPassEnableState(state)
     }
 
     suspend fun userSetPassword(pass: String) {
-        settingsRepository.passSetValue(pass)
+        settingsRepository.setPassValue(pass)
     }
 
     suspend fun changeSortType() {
         val setValue =
             when (sortedTypeFlow.value) {
-                SortTypeEnum.DATE -> SortTypeEnum.PRIORITY
-                SortTypeEnum.PRIORITY -> SortTypeEnum.DATE
+                SortType.DATE -> SortType.PRIORITY
+                SortType.PRIORITY -> SortType.DATE
             }
-        settingsRepository.sortedTypeSet(setValue)
+        settingsRepository.setSortedType(setValue)
     }
 
-    suspend fun changeTheme() {
+    suspend fun userChangedTheme() {
         val setValue =
             when (themeFlow.value) {
-                ThemeEnum.LIGHT -> ThemeEnum.DARK
-                ThemeEnum.DARK -> ThemeEnum.LIGHT
+                Theme.LIGHT -> Theme.DARK
+                Theme.DARK -> Theme.LIGHT
             }
-        settingsRepository.themeSet(setValue)
+        settingsRepository.setTheme(setValue)
     }
 
     suspend fun userEnteredPassword(enteredPass: String): Boolean {
-        return settingsRepository.isPassCorrect(enteredPass)
+        val isPassCorrect = settingsRepository.isPassCorrect(enteredPass)
+        return isPassCorrect
     }
 
-    suspend fun renewIdeasLockState() {
-        settingsRepository.passLockSetState(true)
+    fun openedIdeas(isPassCorrect: Boolean) {
+        _ideasIsLockedFlow.update {
+            !isPassCorrect
+        }
     }
+
 }

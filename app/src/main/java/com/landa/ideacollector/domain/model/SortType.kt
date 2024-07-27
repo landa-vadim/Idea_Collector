@@ -1,6 +1,6 @@
 package com.landa.ideacollector.domain.model
 
-enum class SortTypeEnum {
+enum class SortType {
     DATE,
     PRIORITY
 }

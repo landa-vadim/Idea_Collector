@@ -1,7 +1,5 @@
 package com.landa.ideacollector.presentation.viewmodel
 
-import android.graphics.Color
-import android.icu.text.DateFormat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.landa.ideacollector.R
@@ -9,7 +7,8 @@ import com.landa.ideacollector.domain.interfaces.IdeasRepository
 import com.landa.ideacollector.domain.interfaces.SettingsRepository
 import com.landa.ideacollector.domain.model.Idea
 import com.landa.ideacollector.domain.model.Priority
-import com.landa.ideacollector.domain.model.SortTypeEnum
+import com.landa.ideacollector.domain.model.SortType
+import com.landa.ideacollector.presentation.ui.MainActivity
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
@@ -18,7 +17,7 @@ import java.util.Date
 
 class MainViewModel(
     private val ideasRepository: IdeasRepository,
-    private val settingsRepository: SettingsRepository
+    settingsRepository: SettingsRepository
 ) : ViewModel() {
 
     private var colorIndex = 0
@@ -31,14 +30,15 @@ class MainViewModel(
     private val sortedTypeFlow = settingsRepository.sortedTypeFlow.stateIn(
         viewModelScope,
         SharingStarted.Lazily,
-        SortTypeEnum.DATE
+        SortType.DATE
     )
 
+
     fun getSortedIdeas() =
-        combine(ideasListFlow, sortedTypeFlow) { ideaList: List<Idea>, sortType: SortTypeEnum ->
+        combine(ideasListFlow, sortedTypeFlow) { ideaList: List<Idea>, sortType: SortType ->
             when (sortType) {
-                SortTypeEnum.DATE -> ideaList.sortedBy { it.date }
-                SortTypeEnum.PRIORITY -> ideaList.sortedBy { it.priority }
+                SortType.DATE -> ideaList.sortedBy { it.date }
+                SortType.PRIORITY -> ideaList.sortedBy { it.priority }
             }
         }
 
@@ -86,4 +86,6 @@ class MainViewModel(
         }
         return colorList[colorIndex]
     }
+
+
 }

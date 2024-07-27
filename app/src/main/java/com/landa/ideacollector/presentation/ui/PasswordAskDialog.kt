@@ -8,8 +8,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import com.landa.ideacollector.R
+import com.landa.ideacollector.presentation.viewmodel.MainViewModel
 import com.landa.ideacollector.presentation.viewmodel.SettingsViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -37,9 +38,12 @@ class PasswordAskDialog : DialogFragment() {
         }
         okBtn.setOnClickListener {
             val enteredPass = passwordEt.text.toString()
-            viewLifecycleOwner.lifecycleScope.launch {
-                if (settingsViewModel.userEnteredPassword(enteredPass)) dismiss()
-                else Toast.makeText(context, "Password is wrong!", Toast.LENGTH_SHORT).show()
+            settingsViewModel.viewModelScope.launch {
+                val passIsCorrect = settingsViewModel.userEnteredPassword(enteredPass)
+                if (passIsCorrect) {
+                    settingsViewModel.openedIdeas(true)
+                    dismiss()
+                } else Toast.makeText(context, "Password is wrong!", Toast.LENGTH_SHORT).show()
             }
         }
     }
