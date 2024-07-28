@@ -13,11 +13,12 @@ import com.landa.ideacollector.R
 import com.landa.ideacollector.domain.model.Idea
 import com.landa.ideacollector.presentation.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class IdeasMenuDialog : DialogFragment() {
 
-    private val mainViewModel: MainViewModel by viewModel()
+    private val mainViewModel by activityViewModel<MainViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -9,11 +9,12 @@ import androidx.preference.PreferenceFragmentCompat
 import com.landa.ideacollector.R
 import com.landa.ideacollector.presentation.viewmodel.SettingsViewModel
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsFragment : PreferenceFragmentCompat() {
 
-    private val settingsViewModel by viewModel<SettingsViewModel>()
+    private val settingsViewModel by activityViewModel<SettingsViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

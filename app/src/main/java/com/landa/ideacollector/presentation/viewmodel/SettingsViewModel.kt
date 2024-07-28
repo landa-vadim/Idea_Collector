@@ -32,11 +32,7 @@ class SettingsViewModel(
         Theme.LIGHT
     )
     private val _ideasIsLockedFlow = MutableStateFlow(true)
-    val ideasIsLockedFlow = _ideasIsLockedFlow.stateIn(
-        viewModelScope,
-        SharingStarted.Lazily,
-        true
-    )
+    val ideasIsLockedFlow = _ideasIsLockedFlow.asStateFlow()
 
     suspend fun userSwitchedPassCheckBox(state: Boolean) {
         settingsRepository.setPassEnableState(state)

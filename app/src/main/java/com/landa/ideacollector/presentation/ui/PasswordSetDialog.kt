@@ -12,11 +12,12 @@ import androidx.lifecycle.lifecycleScope
 import com.landa.ideacollector.R
 import com.landa.ideacollector.presentation.viewmodel.SettingsViewModel
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PasswordSetDialog : DialogFragment() {
 
-    private val settingsViewModel by viewModel<SettingsViewModel>()
+    private val settingsViewModel by activityViewModel<SettingsViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,

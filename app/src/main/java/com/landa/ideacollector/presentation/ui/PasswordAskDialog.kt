@@ -13,11 +13,12 @@ import com.landa.ideacollector.R
 import com.landa.ideacollector.presentation.viewmodel.MainViewModel
 import com.landa.ideacollector.presentation.viewmodel.SettingsViewModel
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PasswordAskDialog : DialogFragment() {
 
-    private val settingsViewModel: SettingsViewModel by viewModel()
+    private val settingsViewModel by activityViewModel<SettingsViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
