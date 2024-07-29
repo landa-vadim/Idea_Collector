@@ -7,26 +7,24 @@ import com.landa.ideacollector.domain.model.SortType
 import com.landa.ideacollector.domain.model.Theme
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 
 class SettingsViewModel(
     private val settingsRepository: SettingsRepository
 ) : ViewModel() {
-    val passCheckBoxStateFlow = settingsRepository.isPassEnableStateFlow.stateIn(
+    val passwordCheckBoxStateFlow = settingsRepository.getPasswordEnableState.stateIn(
         viewModelScope,
         SharingStarted.Lazily,
         false
     )
-    val sortedTypeFlow = settingsRepository.sortedTypeFlow.stateIn(
+    val sortedTypeStateFlow = settingsRepository.sortedTypeFlow.stateIn(
         viewModelScope,
         SharingStarted.Lazily,
         SortType.DATE
     )
-    val themeFlow = settingsRepository.themeFlow.stateIn(
+    val themeStateFlow = settingsRepository.themeFlow.stateIn(
         viewModelScope,
         SharingStarted.Lazily,
         Theme.LIGHT
@@ -34,17 +32,17 @@ class SettingsViewModel(
     private val _ideasIsLockedFlow = MutableStateFlow(true)
     val ideasIsLockedFlow = _ideasIsLockedFlow.asStateFlow()
 
-    suspend fun userSwitchedPassCheckBox(state: Boolean) {
-        settingsRepository.setPassEnableState(state)
+    suspend fun userSwitchedPasswordCheckBox(state: Boolean) {
+        settingsRepository.setPasswordEnableState(state)
     }
 
     suspend fun userSetPassword(pass: String) {
-        settingsRepository.setPassValue(pass)
+        settingsRepository.setPasswordValue(pass)
     }
 
-    suspend fun changeSortType() {
+    suspend fun userChangedSortType() {
         val setValue =
-            when (sortedTypeFlow.value) {
+            when (sortedTypeStateFlow.value) {
                 SortType.DATE -> SortType.PRIORITY
                 SortType.PRIORITY -> SortType.DATE
             }
@@ -53,7 +51,7 @@ class SettingsViewModel(
 
     suspend fun userChangedTheme() {
         val setValue =
-            when (themeFlow.value) {
+            when (themeStateFlow.value) {
                 Theme.LIGHT -> Theme.DARK
                 Theme.DARK -> Theme.LIGHT
             }
@@ -61,7 +59,7 @@ class SettingsViewModel(
     }
 
     suspend fun userEnteredPassword(enteredPass: String): Boolean {
-        val isPassCorrect = settingsRepository.isPassCorrect(enteredPass)
+        val isPassCorrect = settingsRepository.isPasswordCorrect(enteredPass)
         return isPassCorrect
     }
 

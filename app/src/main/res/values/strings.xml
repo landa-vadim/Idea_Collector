@@ -1,3 +1,23 @@
 <resources>
     <string name="app_name">Idea Collector</string>
+    <string name="entered_idea">Entered idea:</string>
+    <string name="edit_idea">Edit idea:</string>
+    <string name="edit_idea_menu">Edit idea</string>
+    <string name="delete_idea_menu">Delete idea</string>
+    <string name="enter_password">Enter password:</string>
+    <string name="password">Password:</string>
+    <string name="confirm">Confirmation:</string>
+    <string name="new_password_and_confirmation">New password and confirmation</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="ok_button">OK</string>
+    <string name="password_settings">PASSWORD SETTINGS</string>
+    <string name="password_switch_to_enable">Enable password</string>
+    <string name="password_enable">Password </string>
+    <string name="password_is_enable">Password is enable</string>
+    <string name="password_is_not_enable">Password is not enable</string>
+    <string name="set_new_password">Set new password</string>
+    <string name="set_new_password_status_off">Password doesnt set</string>
+    <string name="set_new_password_status_on">Password is set</string>
+    <string name="sort_type">Sort type</string>
+    <string name="theme">Theme</string>
 </resources>

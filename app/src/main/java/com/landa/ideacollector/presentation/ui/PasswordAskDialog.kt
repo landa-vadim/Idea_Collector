@@ -10,11 +10,9 @@ import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.viewModelScope
 import com.landa.ideacollector.R
-import com.landa.ideacollector.presentation.viewmodel.MainViewModel
 import com.landa.ideacollector.presentation.viewmodel.SettingsViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PasswordAskDialog : DialogFragment() {
 

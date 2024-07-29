@@ -9,7 +9,7 @@ class RoomIdeasRepository(
     private val ideasDao: IdeasDao
 ) : IdeasRepository {
 
-    override val ideasList: Flow<List<Idea>> = ideasDao.getAllItems()
+    override val ideasList: Flow<List<Idea>> = ideasDao.getAllIdeas()
 
     override suspend fun insertIdea(idea: Idea) {
         ideasDao.insertIdea(idea)

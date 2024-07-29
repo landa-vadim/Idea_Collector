@@ -38,14 +38,14 @@ class MainActivity : AppCompatActivity(), RecyclerViewListener {
         }
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                settingsViewModel.themeFlow.collect { state ->
+                settingsViewModel.themeStateFlow.collect { state ->
                     themeSetResources(state)
                 }
             }
         }
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                settingsViewModel.passCheckBoxStateFlow.collect { state ->
+                settingsViewModel.passwordCheckBoxStateFlow.collect { state ->
                     lockIdeas(state)
                 }
             }
@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity(), RecyclerViewListener {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 settingsViewModel.ideasIsLockedFlow.collect { state ->
-                    if (settingsViewModel.passCheckBoxStateFlow.value) lockIdeas(state)
+                    if (settingsViewModel.passwordCheckBoxStateFlow.value) lockIdeas(state)
                 }
             }
         }
@@ -92,7 +92,8 @@ class MainActivity : AppCompatActivity(), RecyclerViewListener {
             lockImageView.visibility = visibility
             bg1ImageView.visibility = visibility
             bg2ImageView.visibility = visibility
-            bg3ImageView.visibility = visibility
+            if (bg3ImageView.visibility == View.GONE) return
+            else bg3ImageView.visibility = visibility
         }
     }
 

@@ -8,12 +8,12 @@ import com.landa.ideacollector.domain.interfaces.SettingsRepository
 import com.landa.ideacollector.domain.model.Idea
 import com.landa.ideacollector.domain.model.Priority
 import com.landa.ideacollector.domain.model.SortType
-import com.landa.ideacollector.presentation.ui.MainActivity
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import java.util.Date
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class MainViewModel(
     private val ideasRepository: IdeasRepository,
@@ -49,7 +49,9 @@ class MainViewModel(
             2 -> Priority.LOW
             else -> return
         }
-        val ideaDate = Date().toString()
+        val currentDate = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        val ideaDate = currentDate.format(formatter).toString()
         val idea = Idea(
             null, ideaPriority, ideaText, ideaDate
         )

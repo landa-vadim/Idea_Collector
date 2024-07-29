@@ -19,7 +19,7 @@ class SettingsActivity : AppCompatActivity() {
         openFragment(SettingsFragment())
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                settingsViewModel.themeFlow.collect { state ->
+                settingsViewModel.themeStateFlow.collect { state ->
                     setTheme(state)
                 }
             }

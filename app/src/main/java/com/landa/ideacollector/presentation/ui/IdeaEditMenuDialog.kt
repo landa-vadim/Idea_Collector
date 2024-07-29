@@ -8,16 +8,16 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat.getColor
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import com.landa.ideacollector.R
 import com.landa.ideacollector.domain.model.Idea
 import com.landa.ideacollector.presentation.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class IdeasEditMenuDialog : DialogFragment() {
+class IdeaEditMenuDialog : DialogFragment() {
     private val mainViewModel by activityViewModel<MainViewModel>()
 
     override fun onCreateView(
@@ -37,15 +37,15 @@ class IdeasEditMenuDialog : DialogFragment() {
         if (idea != null) {
             editTextIdea.setText(idea.idea)
             priorityColor = mainViewModel.getPriorityColor(idea.priority)
-            imageButtonPriority.setBackgroundColor(resources.getColor(priorityColor))
+            imageButtonPriority.setBackgroundColor(getColor(resources, priorityColor, null))
         }
         imageButtonPriority.setOnClickListener {
             priorityColor = mainViewModel.userClickedPriorityButton()
-            imageButtonPriority.setBackgroundColor(resources.getColor(priorityColor))
+            imageButtonPriority.setBackgroundColor(getColor(resources, priorityColor, null))
         }
         okButton.setOnClickListener {
             val ideaText = editTextIdea.text.toString()
-            viewLifecycleOwner.lifecycleScope.launch {
+            mainViewModel.viewModelScope.launch {
                 if (idea != null) {
                     mainViewModel.userClickedEditIdea(
                         idea,

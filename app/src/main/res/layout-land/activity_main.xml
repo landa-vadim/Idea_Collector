@@ -11,7 +11,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:background="@color/red"
         android:src="@drawable/ic_idea"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,11 +19,10 @@
 
     <EditText
         android:id="@id/ideaEditText"
-        android:layout_width="200dp"
+        android:layout_width="650dp"
         android:layout_height="60dp"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="30dp"
-        android:hint="@string/entered_idea"
+        android:hint="Запишите идею:"
         app:layout_constraintBottom_toBottomOf="@id/priorityImageButton"
         app:layout_constraintStart_toEndOf="@+id/priorityImageButton" />
 
@@ -32,7 +31,6 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="30dp"
         android:background="@android:color/transparent"
         android:src="@drawable/ic_done"
         app:layout_constraintBottom_toBottomOf="@+id/ideaEditText"
@@ -67,8 +65,8 @@
         android:adjustViewBounds="true"
         android:src="@drawable/m_bg_1"
         android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/bg1ImageView"
+        app:layout_constraintStart_toEndOf="@id/bg1ImageView"
+        app:layout_constraintTop_toTopOf="@id/ideasList"
         tools:visibility="visible" />
 
     <ImageView
@@ -88,6 +86,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/vector"
         android:visibility="invisible"
+        android:layout_marginTop="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -10,7 +10,6 @@ import com.landa.ideacollector.R
 import com.landa.ideacollector.presentation.viewmodel.SettingsViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsFragment : PreferenceFragmentCompat() {
 
@@ -19,12 +18,12 @@ class SettingsFragment : PreferenceFragmentCompat() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewLifecycleOwner.lifecycleScope.launch {
-            settingsViewModel.sortedTypeFlow.collect { sortedType ->
+            settingsViewModel.sortedTypeStateFlow.collect { sortedType ->
                 preferenceScreen.getPreference(3).summary = sortedType.toString()
             }
         }
         viewLifecycleOwner.lifecycleScope.launch {
-            settingsViewModel.themeFlow.collect { theme ->
+            settingsViewModel.themeStateFlow.collect { theme ->
                 preferenceScreen.getPreference(4).summary = theme.toString()
             }
         }
@@ -37,7 +36,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         preferenceScreen.getPreference(1).setOnPreferenceClickListener {
             val checkBoxState = checkBoxPreference.isChecked
             viewLifecycleOwner.lifecycleScope.launch {
-                settingsViewModel.userSwitchedPassCheckBox(checkBoxState)
+                settingsViewModel.userSwitchedPasswordCheckBox(checkBoxState)
             }
             true
         }
@@ -47,7 +46,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }
         preferenceScreen.getPreference(3).setOnPreferenceClickListener {
             settingsViewModel.viewModelScope.launch {
-                settingsViewModel.changeSortType()
+                settingsViewModel.userChangedSortType()
             }
             true
         }

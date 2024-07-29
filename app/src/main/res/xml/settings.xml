@@ -6,20 +6,20 @@
 
     <Preference
         android:key="title"
-        android:title="PASSWORD SETTINGS"
+        android:title="@string/password_settings"
         app:selectable="false" />
 
     <CheckBoxPreference
         android:key="enablePassword"
-        android:summaryOff="Enables password access to the ideas"
-        android:summaryOn="Password is SET!"
-        android:title="Enable Password"
+        android:title="@string/password_switch_to_enable"
+        android:summaryOff="@string/password_is_not_enable"
+        android:summaryOn="@string/password_is_enable"
         tools:defaultValue="true" />
 
     <Preference
         android:key="setPassword"
-        android:title="New password and confirmation"
-        android:summary="Password is doesnt set!"
+        android:title="@string/set_new_password"
+        android:summary="@string/set_new_password_status_on"
         />
 
     <Preference  android:key="sortType"
@@ -29,7 +29,7 @@
 
     <Preference  android:key="theme"
         android:title="Theme"
-        android:summary="Light"
+        tools:summary="Light"
         />
 
 

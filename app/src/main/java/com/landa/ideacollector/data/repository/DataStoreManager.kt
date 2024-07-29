@@ -12,19 +12,19 @@ import kotlinx.coroutines.flow.map
 
 class DataStoreManager(val dataStore: DataStore<Preferences>) {
 
-    suspend fun isPassEnabled(isPassEnabled: Boolean) {
+    suspend fun setPasswordEnableState(isPassEnabled: Boolean) {
         dataStore.edit { pref ->
             pref[booleanPreferencesKey("pass_check_box_state")] = isPassEnabled
         }
     }
 
-    suspend fun passValue(pass: String) {
+    suspend fun setPassword(pass: String) {
         dataStore.edit { pref ->
             pref[stringPreferencesKey("pass")] = pass
         }
     }
 
-    suspend fun sortedTypeValue(sortType: SortType) {
+    suspend fun setSortedType(sortType: SortType) {
         dataStore.edit { pref ->
             pref[intPreferencesKey("sort_type")] =
                 when (sortType) {
@@ -34,7 +34,7 @@ class DataStoreManager(val dataStore: DataStore<Preferences>) {
         }
     }
 
-    suspend fun themeValue(theme: Theme) {
+    suspend fun setTheme(theme: Theme) {
         dataStore.edit { pref ->
             pref[intPreferencesKey("theme")] =
                 when (theme) {
@@ -44,12 +44,12 @@ class DataStoreManager(val dataStore: DataStore<Preferences>) {
         }
     }
 
-    fun isPassEnabled() = dataStore.data
+    fun getPasswordEnableState() = dataStore.data
         .map { pref ->
             pref[booleanPreferencesKey("pass_check_box_state")] ?: false
         }
 
-    fun getPassValue() = dataStore.data
+    fun getPasswordValue() = dataStore.data
         .map { pref ->
             pref[stringPreferencesKey("pass")] ?: "0000"
         }
@@ -73,6 +73,4 @@ class DataStoreManager(val dataStore: DataStore<Preferences>) {
                 else -> Theme.LIGHT
             }
         }
-
-
 }
