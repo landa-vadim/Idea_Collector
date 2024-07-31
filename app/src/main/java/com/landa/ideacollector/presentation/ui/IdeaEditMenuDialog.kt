@@ -10,10 +10,12 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat.getColor
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import com.landa.ideacollector.R
 import com.landa.ideacollector.domain.model.Idea
 import com.landa.ideacollector.presentation.viewmodel.MainViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
@@ -33,15 +35,17 @@ class IdeaEditMenuDialog : DialogFragment() {
         val cancelButton = view.findViewById<Button>(R.id.editIdeaCancelButton)
         val okButton = view.findViewById<Button>(R.id.editIdeaOkButton)
         val idea = arguments?.getParcelable("idea") as Idea?
-        var priorityColor = 0
+        lifecycleScope.launch {
+            mainViewModel.currentPriorityEditIdea.collect { state ->
+                imageButtonPriority.setBackgroundColor(getColor(resources, state, null))
+            }
+        }
         if (idea != null) {
             editTextIdea.setText(idea.idea)
-            priorityColor = mainViewModel.getPriorityColor(idea.priority)
-            imageButtonPriority.setBackgroundColor(getColor(resources, priorityColor, null))
+            mainViewModel.getPriorityColor(idea.priority)
         }
         imageButtonPriority.setOnClickListener {
-            priorityColor = mainViewModel.userClickedPriorityButton()
-            imageButtonPriority.setBackgroundColor(getColor(resources, priorityColor, null))
+            mainViewModel.userClickedPriorityEditIdeaButton()
         }
         okButton.setOnClickListener {
             val ideaText = editTextIdea.text.toString()
@@ -49,13 +53,10 @@ class IdeaEditMenuDialog : DialogFragment() {
                 if (idea != null) {
                     mainViewModel.userClickedEditIdea(
                         idea,
-                        ideaText,
-                        priorityColor
+                        ideaText
                     )
                     dismiss()
-                }
-
-                else Toast.makeText(context, "Idea is not found", Toast.LENGTH_SHORT).show()
+                } else Toast.makeText(context, "Idea is not found", Toast.LENGTH_SHORT).show()
             }
         }
         cancelButton.setOnClickListener {

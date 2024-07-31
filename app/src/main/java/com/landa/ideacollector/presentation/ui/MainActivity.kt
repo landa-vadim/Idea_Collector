@@ -60,13 +60,20 @@ class MainActivity : AppCompatActivity(), RecyclerViewListener {
         binding.apply {
             ideasList.layoutManager = LinearLayoutManager(this@MainActivity)
             ideasList.adapter = adapter
+            lifecycleScope.launch {
+                repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    mainViewModel.currentPriority.collect { state ->
+                         priorityImageButton.setBackgroundColor(getColor(state))
+                    }
+                }
+            }
             doneImageButton.setOnClickListener {
                 val ideaText = ideaEditText.text.toString()
                 ideaEditText.text.clear()
                 mainViewModel.userClickedDoneButton(ideaText)
             }
             priorityImageButton.setOnClickListener {
-                binding.priorityImageButton.setBackgroundColor(getColor(mainViewModel.userClickedPriorityButton()))
+                mainViewModel.userClickedPriorityButton()
             }
             doneImageButton.setOnLongClickListener {
                 val etIdeaText = ideaEditText.text
@@ -107,8 +114,8 @@ class MainActivity : AppCompatActivity(), RecyclerViewListener {
     override fun onLongClick(idea: Idea) {
         val args = Bundle()
         args.putParcelable("idea", idea)
-        val ideasMenuDialog = IdeasMenuDialog()
-        ideasMenuDialog.arguments = args
-        ideasMenuDialog.show(supportFragmentManager, "ideas_menu_dialog")
+        val ideaMenuDialog = IdeaMenuDialog()
+        ideaMenuDialog.arguments = args
+        ideaMenuDialog.show(supportFragmentManager, "ideas_menu_dialog")
     }
 }

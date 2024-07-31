@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class SettingsViewModel(
     private val settingsRepository: SettingsRepository
@@ -29,6 +29,10 @@ class SettingsViewModel(
         SharingStarted.Lazily,
         Theme.LIGHT
     )
+    private val _userEnteredPasswordFlow = MutableStateFlow(StateUserEnteredPassword.STARTEDSTATE)
+    val userEnteredPasswordFlow = _userEnteredPasswordFlow.asStateFlow()
+    private val _userSetPasswordFlow = MutableStateFlow(StateUserSetPassword.STARTEDSTATE)
+    val userSetPasswordFlow = _userSetPasswordFlow.asStateFlow()
     private val _ideasIsLockedFlow = MutableStateFlow(true)
     val ideasIsLockedFlow = _ideasIsLockedFlow.asStateFlow()
 
@@ -36,8 +40,21 @@ class SettingsViewModel(
         settingsRepository.setPasswordEnableState(state)
     }
 
-    suspend fun userSetPassword(pass: String) {
-        settingsRepository.setPasswordValue(pass)
+    fun userSetPassword(pass: String, confirm: String) {
+        viewModelScope.launch {
+            if (pass.isEmpty() || confirm.isEmpty()) {
+                _userSetPasswordFlow.value = StateUserSetPassword.ONEFIELDISEMPTY
+                return@launch
+            }
+            if (pass != confirm) {
+                _userSetPasswordFlow.value = StateUserSetPassword.FIELDSNOTTHESAME
+                return@launch
+            }
+            else {
+                settingsRepository.setPasswordValue(pass)
+                _userSetPasswordFlow.value = StateUserSetPassword.PASSWORDWASACCEPTED
+            }
+        }
     }
 
     suspend fun userChangedSortType() {
@@ -58,15 +75,34 @@ class SettingsViewModel(
         settingsRepository.setTheme(setValue)
     }
 
-    suspend fun userEnteredPassword(enteredPass: String): Boolean {
-        val isPassCorrect = settingsRepository.isPasswordCorrect(enteredPass)
-        return isPassCorrect
-    }
-
-    fun openedIdeas(isPassCorrect: Boolean) {
-        _ideasIsLockedFlow.update {
-            !isPassCorrect
+    fun userEnteredPassword(enteredPass: String) {
+        viewModelScope.launch {
+            val isPassCorrect = settingsRepository.isPasswordCorrect(enteredPass)
+            _userEnteredPasswordFlow.value =
+                if (isPassCorrect) StateUserEnteredPassword.CORRECTPASS
+                else StateUserEnteredPassword.WRONGPASS
+            _ideasIsLockedFlow.emit(!isPassCorrect)
         }
     }
 
+    fun setPasswordDialogDismiss() {
+        _userSetPasswordFlow.value = StateUserSetPassword.STARTEDSTATE
+    }
+
+    fun askPasswordDialogDismiss() {
+        _userEnteredPasswordFlow.value = StateUserEnteredPassword.STARTEDSTATE
+    }
+}
+
+enum class StateUserEnteredPassword {
+    STARTEDSTATE,
+    WRONGPASS,
+    CORRECTPASS
+}
+
+enum class StateUserSetPassword {
+    STARTEDSTATE,
+    ONEFIELDISEMPTY,
+    FIELDSNOTTHESAME,
+    PASSWORDWASACCEPTED
 }

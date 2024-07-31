@@ -14,7 +14,7 @@ import com.landa.ideacollector.presentation.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
-class IdeasMenuDialog : DialogFragment() {
+class IdeaMenuDialog : DialogFragment() {
 
     private val mainViewModel by activityViewModel<MainViewModel>()
 
