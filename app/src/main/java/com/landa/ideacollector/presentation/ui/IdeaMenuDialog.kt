@@ -42,12 +42,10 @@ class IdeaMenuDialog : DialogFragment() {
             } else Toast.makeText(context, "idea is not found", Toast.LENGTH_SHORT).show()
         }
         deleteIdea.setOnClickListener {
-            mainViewModel.viewModelScope.launch {
-                if (idea != null) {
-                    mainViewModel.userClickedDeleteIdea(idea)
-                    dismiss()
-                } else Toast.makeText(context, "idea is not found", Toast.LENGTH_SHORT).show()
-            }
+            if (idea != null) {
+                mainViewModel.userClickedDeleteIdea(idea)
+                dismiss()
+            } else Toast.makeText(context, "idea is not found", Toast.LENGTH_SHORT).show()
         }
     }
 }

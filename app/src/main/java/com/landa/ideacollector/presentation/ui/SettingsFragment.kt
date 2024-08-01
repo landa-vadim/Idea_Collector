@@ -59,4 +59,3 @@ class SettingsFragment : PreferenceFragmentCompat() {
         return
     }
 }
-

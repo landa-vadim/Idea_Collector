@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import com.landa.ideacollector.R
 import com.landa.ideacollector.domain.model.Idea
+import com.landa.ideacollector.domain.model.Priority
 import com.landa.ideacollector.presentation.viewmodel.MainViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -37,27 +38,29 @@ class IdeaEditMenuDialog : DialogFragment() {
         val idea = arguments?.getParcelable("idea") as Idea?
         lifecycleScope.launch {
             mainViewModel.currentPriorityEditIdea.collect { state ->
-                imageButtonPriority.setBackgroundColor(getColor(resources, state, null))
+                val priorityColor = when(state) {
+                    Priority.HIGH -> R.color.red
+                    Priority.MEDIUM -> R.color.yellow
+                    Priority.LOW -> R.color.green
+                }
+                imageButtonPriority.setBackgroundColor(getColor(resources, priorityColor, null))
             }
         }
         if (idea != null) {
             editTextIdea.setText(idea.idea)
-            mainViewModel.getPriorityColor(idea.priority)
         }
         imageButtonPriority.setOnClickListener {
             mainViewModel.userClickedPriorityEditIdeaButton()
         }
         okButton.setOnClickListener {
             val ideaText = editTextIdea.text.toString()
-            mainViewModel.viewModelScope.launch {
-                if (idea != null) {
-                    mainViewModel.userClickedEditIdea(
-                        idea,
-                        ideaText
-                    )
-                    dismiss()
-                } else Toast.makeText(context, "Idea is not found", Toast.LENGTH_SHORT).show()
-            }
+            if (idea != null) {
+                mainViewModel.userClickedEditIdea(
+                    idea,
+                    ideaText
+                )
+                dismiss()
+            } else Toast.makeText(context, "Idea is not found", Toast.LENGTH_SHORT).show()
         }
         cancelButton.setOnClickListener {
             dismiss()

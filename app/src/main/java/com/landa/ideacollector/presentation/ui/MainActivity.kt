@@ -11,6 +11,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.landa.ideacollector.R
 import com.landa.ideacollector.databinding.ActivityMainBinding
 import com.landa.ideacollector.domain.model.Idea
+import com.landa.ideacollector.domain.model.Priority
 import com.landa.ideacollector.domain.model.Theme
 import com.landa.ideacollector.presentation.adapter.IdeaAdapter
 import com.landa.ideacollector.presentation.interfaces.RecyclerViewListener
@@ -63,7 +64,12 @@ class MainActivity : AppCompatActivity(), RecyclerViewListener {
             lifecycleScope.launch {
                 repeatOnLifecycle(Lifecycle.State.STARTED) {
                     mainViewModel.currentPriority.collect { state ->
-                         priorityImageButton.setBackgroundColor(getColor(state))
+                        val priorityColor = when(state) {
+                            Priority.HIGH -> R.color.red
+                            Priority.MEDIUM -> R.color.yellow
+                            Priority.LOW -> R.color.green
+                        }
+                        priorityImageButton.setBackgroundColor(getColor(priorityColor))
                     }
                 }
             }
